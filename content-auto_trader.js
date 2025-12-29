@@ -1,9 +1,9 @@
-// content.js — Auto Trader (v2.8.1 — Auto-promoted signals support for PS Adaptive v18.0.17)
+// content.js — Auto Trader (v2.9.0 — Pocket Scout v3.0 support with Market Regime & MTF)
 (function(){
   'use strict';
-  if (window.__AT_CONTENT_281) return; // v2.8.1
-  window.__AT_CONTENT_281 = true;
-  console.log('[AutoTrader] v2.8.1 - Auto-promoted signals support for PS Adaptive v18.0.17');
+  if (window.__AT_CONTENT_290) return; // v2.9.0
+  window.__AT_CONTENT_290 = true;
+  console.log('[AutoTrader] v2.9.0 - Pocket Scout v3.0 support (Market Regime Detection, Multi-Timeframe Analysis, Win Rate tracking)');
 
   /* ===================== PERSIST / KEYS ===================== */
   const LS = {
@@ -91,7 +91,14 @@
       
       // Debug: Log feed contents periodically
       if (signals && signals.length > 0 && Date.now() % 10000 < 1500) {
-        console.log(`[AutoTrader] ✅ Feed read: ${signals.length} signal(s) - ${signals.map(s => `${s.action || '?'}@${s.confidence || 0}%${s.isAutoPromoted ? '⭐' : ''}`).join(', ')}`);
+        // Detect if signal is from Pocket Scout v3.0 (has duration, wr, entryPrice fields)
+        const isPS3 = signals.some(s => s.duration !== undefined && s.wr !== undefined && s.entryPrice !== undefined);
+        const source = isPS3 ? 'Pocket Scout v3.0' : 'Pocket Scout Legacy';
+        console.log(`[AutoTrader] ✅ Feed read from ${source}: ${signals.length} signal(s) - ${signals.map(s => {
+          const wr = s.wr !== undefined ? ` WR:${s.wr.toFixed(1)}%` : '';
+          const promo = s.isAutoPromoted ? '⭐' : '';
+          return `${s.action || '?'}@${s.confidence || 0}%${wr}${promo}`;
+        }).join(', ')}`);
       }
       
       return signals;
@@ -103,13 +110,16 @@
   }
 
   function getMinutes(sig){
-    // ✅ Primary: explicit minutes
+    // ✅ Primary: explicit minutes or duration (Pocket Scout v3.0)
     if (Number.isFinite(sig.minutes)) return sig.minutes;
+    if (Number.isFinite(sig.duration)) return sig.duration; // Pocket Scout v3.0 uses "duration"
     // ✅ From optimalExpiry (Pocket Scout v18 feed) in seconds
     if (Number.isFinite(sig.optimalExpiry)) return Math.round(sig.optimalExpiry / 60);
     // ✅ From expirySeconds (bridge) in seconds
     if (Number.isFinite(sig.expirySeconds)) return Math.round(sig.expirySeconds / 60);
-    // ✅ Other fallbacks
+    // ✅ From expiry in seconds (Pocket Scout v3.0)
+    if (Number.isFinite(sig.expiry) && sig.expiry > 15) return Math.round(sig.expiry / 60); // If >15, assume seconds
+    // ✅ From expiry in minutes (legacy)
     if (Number.isFinite(sig.expiry)) return sig.expiry;
     if (Number.isFinite(sig.expiryMinutes)) return sig.expiryMinutes;
     return null;
@@ -150,21 +160,23 @@
       const okAct = action==='BUY' || action==='SELL';
       const conf = getConfidence(it);
       
-      // V18.0.17: Check signal freshness using timestamp
+      // V2.9.0: Check signal freshness using timestamp (Pocket Scout v3.0 compatibility)
       const signalTimestamp = it.timestamp || 0;
       const signalAge = now - signalTimestamp;
       const isFresh = signalTimestamp > 0 && signalAge <= MAX_SIGNAL_AGE_MS;
       
-      // V18.0.16: Auto-promoted signals are valid if confidence >= threshold
-      // They have been promoted because group WR >= 70%, so they're trustworthy
+      // V2.9.0: Support both auto-promoted signals and Pocket Scout v3.0 signals
       const isValid = okMin && okAct && conf >= thr && isFresh;
       
-      if (isValid && it.isAutoPromoted) {
-        console.log(`[AutoTrader] ✅ Auto-promoted candidate: ${it.model || it.groupId} @ ${conf}% (WR-based promotion, age: ${Math.round(signalAge/1000)}s)`);
+      // V2.9.0: Enhanced logging for Pocket Scout v3.0 signals
+      if (isValid) {
+        const source = it.duration !== undefined && it.wr !== undefined ? 'PS v3.0' : (it.isAutoPromoted ? 'Auto-promoted' : 'Legacy');
+        const wr = it.wr !== undefined ? ` | WR:${it.wr.toFixed(1)}%` : '';
+        console.log(`[AutoTrader] ✅ Valid candidate [${source}]: ${action} @ ${conf}%${wr} (${mins}min, age: ${Math.round(signalAge/1000)}s)`);
       }
       
       if (!isFresh && signalTimestamp > 0) {
-        console.log(`[AutoTrader] ⏸️ Signal too old: ${it.model || it.groupId} (age: ${Math.round(signalAge/1000)}s > ${MAX_SIGNAL_AGE_MS/1000}s)`);
+        console.log(`[AutoTrader] ⏸️ Signal too old: ${it.model || it.groupId || 'signal'} (age: ${Math.round(signalAge/1000)}s > ${MAX_SIGNAL_AGE_MS/1000}s)`);
       }
       
       return isValid;
@@ -172,24 +184,27 @@
     
     if(!candidates.length) return null;
     
-    // V18.0.16: Sort with preference for auto-promoted signals (same confidence)
+    // V2.9.0: Sort with preference for higher confidence, then WR, then auto-promoted
     return candidates
       .map((it,idx)=>({
         ...it,
         action: (it.action || '').toUpperCase(),
         minutes: getMinutes(it),
         confidence: getConfidence(it),
+        wr: it.wr || 0, // Include WR in sorting
         __i: idx,
         __isAutoPromoted: it.isAutoPromoted || false
       }))
       .sort((a,b)=> {
         // Primary: confidence (desc)
         if (b.confidence !== a.confidence) return b.confidence - a.confidence;
-        // Secondary: auto-promoted signals preferred (same confidence)
+        // Secondary: WR (desc) - prefer signals with better historical performance
+        if (b.wr !== a.wr) return b.wr - a.wr;
+        // Tertiary: auto-promoted signals preferred (same confidence & WR)
         if (a.__isAutoPromoted !== b.__isAutoPromoted) return b.__isAutoPromoted ? 1 : -1;
-        // Tertiary: minutes (asc)
+        // Quaternary: minutes (asc) - prefer shorter duration
         if (a.minutes !== b.minutes) return a.minutes - b.minutes;
-        // Quaternary: original index
+        // Quinary: original index
         return a.__i - b.__i;
       })[0];
   }
