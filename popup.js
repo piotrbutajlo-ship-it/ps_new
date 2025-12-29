@@ -1,5 +1,5 @@
 /**
- * Pocket Scout Time - Popup Script
+ * Pocket Scout v3.0 - Popup Script
  */
 
 function updateMetrics() {
@@ -13,51 +13,48 @@ function updateMetrics() {
     
     chrome.tabs.sendMessage(tabs[0].id, { type: 'GET_METRICS' }, (response) => {
       if (chrome.runtime.lastError) {
-        metricsDiv.innerHTML = `<div style="opacity:0.7;">Error: ${chrome.runtime.lastError.message}</div>`;
+        metricsDiv.innerHTML = `<div style="opacity:0.7;">Please open PocketOption.com first</div>`;
         return;
       }
       
       if (response && response.metrics) {
         const m = response.metrics;
-        const regime = response.regime;
-        const risk = response.risk;
-        const patterns = response.patterns;
-        const riskText = risk && risk.ratio ? `${(risk.ratio * 100).toFixed(2)}% (${risk.level})` : 'n/a';
-        const patternText = patterns && patterns.patterns && patterns.patterns.length ? patterns.patterns.join(', ') : 'None';
-        const regimeText = regime && regime.trend ? regime.trend.direction : 'NEUTRAL';
+        const lastSignal = response.lastSignal;
+        const wrColor = m.winRate >= 60 ? '#10b981' : m.winRate >= 50 ? '#f59e0b' : '#ef4444';
+        
         metricsDiv.innerHTML = `
           <div class="metric">
             <div class="metric-label">Win Rate</div>
-            <div class="metric-value">${m.winRate.toFixed(1)}%</div>
+            <div class="metric-value" style="color:${wrColor};">${m.winRate.toFixed(1)}%</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">Total Signals</div>
+            <div class="metric-value">${m.totalSignals}</div>
           </div>
           <div class="metric">
             <div class="metric-label">Wins / Losses</div>
-            <div class="metric-value">${m.sessionWins} / ${m.sessionLosses}</div>
+            <div class="metric-value">${m.wins} / ${m.losses}</div>
           </div>
           <div class="metric">
-            <div class="metric-label">Current Streak</div>
-            <div class="metric-value">${m.currentStreak}</div>
+            <div class="metric-label">Signal Interval</div>
+            <div class="metric-value">${m.currentInterval} min</div>
           </div>
           <div class="metric">
-            <div class="metric-label">Epsilon (Exploration)</div>
-            <div class="metric-value">${(m.epsilon * 100).toFixed(1)}%</div>
+            <div class="metric-label">Candles Collected</div>
+            <div class="metric-value">${response.candles}</div>
           </div>
           <div class="metric">
-            <div class="metric-label">Total Experiences</div>
-            <div class="metric-value">${m.totalExperiences || 0}</div>
+            <div class="metric-label">Warmup Status</div>
+            <div class="metric-value">${response.warmupComplete ? '✅ Complete' : '🔥 In Progress'}</div>
           </div>
+          ${lastSignal ? `
           <div class="metric">
-            <div class="metric-label">Volatility</div>
-            <div class="metric-value">${riskText}</div>
+            <div class="metric-label">Last Signal</div>
+            <div class="metric-value" style="color:${lastSignal.action === 'BUY' ? '#10b981' : '#ef4444'};">
+              ${lastSignal.action} @ ${lastSignal.confidence}%
+            </div>
           </div>
-          <div class="metric">
-            <div class="metric-label">Regime</div>
-            <div class="metric-value">${regimeText}</div>
-          </div>
-          <div class="metric">
-            <div class="metric-label">Patterns</div>
-            <div class="metric-value" style="font-size:11px;">${patternText}</div>
-          </div>
+          ` : ''}
         `;
       } else {
         metricsDiv.innerHTML = '<div style="opacity:0.7;">No data available - waiting for signals...</div>';

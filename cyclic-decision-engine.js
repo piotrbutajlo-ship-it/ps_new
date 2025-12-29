@@ -1,17 +1,17 @@
 /**
  * Pocket Scout v3.0 - Cyclic Decision Engine
- * Generates signals every 10 minutes (600 seconds)
+ * Configurable signal generation interval (1-10 minutes)
  */
 
 window.CyclicDecisionEngine = (function() {
   'use strict';
 
-  const CYCLE_INTERVAL_MS = 600 * 1000; // 10 minutes (600 seconds)
+  let currentIntervalMs = 600 * 1000; // Default 10 minutes (600 seconds)
   let intervalId = null;
   let signalGenerationCallback = null;
   let lastCycleStartTime = 0;
 
-  function initialize(callback) {
+  function initialize(callback, intervalMinutes = 10) {
     if (intervalId) {
       clearInterval(intervalId);
     }
@@ -21,11 +21,15 @@ window.CyclicDecisionEngine = (function() {
       return;
     }
 
+    // Set interval (1-10 minutes)
+    const minutes = Math.max(1, Math.min(10, intervalMinutes));
+    currentIntervalMs = minutes * 60 * 1000;
+
     signalGenerationCallback = callback;
     lastCycleStartTime = Date.now();
 
     // Immediately trigger first signal
-    console.log('[CyclicDecisionEngine] Initializing - first signal in 10:00 minutes');
+    console.log(`[CyclicDecisionEngine] Initializing - first signal in ${minutes} minute(s)`);
     signalGenerationCallback();
 
     // Set up recurring interval
@@ -33,14 +37,14 @@ window.CyclicDecisionEngine = (function() {
       const now = Date.now();
       const timeSinceLastCycle = now - lastCycleStartTime;
 
-      if (timeSinceLastCycle >= CYCLE_INTERVAL_MS) {
+      if (timeSinceLastCycle >= currentIntervalMs) {
         console.log(`[CyclicDecisionEngine] Cycle triggered (${((now - lastCycleStartTime) / 1000).toFixed(1)}s)`);
         signalGenerationCallback();
         lastCycleStartTime = now;
       }
     }, 1000); // Check every second
 
-    console.log(`[CyclicDecisionEngine] Started - interval: ${CYCLE_INTERVAL_MS / 1000}s`);
+    console.log(`[CyclicDecisionEngine] Started - interval: ${currentIntervalMs / 1000}s (${minutes} min)`);
   }
 
   function stop() {
@@ -58,7 +62,11 @@ window.CyclicDecisionEngine = (function() {
   function getRemainingTime() {
     const now = Date.now();
     const elapsed = now - lastCycleStartTime;
-    return Math.max(0, CYCLE_INTERVAL_MS - elapsed);
+    return Math.max(0, currentIntervalMs - elapsed);
+  }
+  
+  function getCurrentInterval() {
+    return currentIntervalMs;
   }
 
   return {
@@ -66,9 +74,9 @@ window.CyclicDecisionEngine = (function() {
     stop,
     getLastCycleStartTime,
     getRemainingTime,
-    CYCLE_INTERVAL_MS
+    getCurrentInterval
   };
 })();
 
-console.log('[Pocket Scout v3.0] Cyclic Decision Engine loaded - 10 minute intervals');
+console.log('[Pocket Scout v3.0] Cyclic Decision Engine loaded - configurable intervals');
 

@@ -19,10 +19,60 @@
   let warmupComplete = false;
   let lastSignal = null;
   let signalHistory = [];
-  const MAX_HISTORY = 10;
+  const MAX_HISTORY = 50; // Track more history for WR calculation
+  
+  // Win Rate tracking
+  let totalSignals = 0;
+  let winningSignals = 0;
+  let losingSignals = 0;
+  
+  // Configurable signal interval (minutes)
+  let signalIntervalMinutes = 10; // Default 10 minutes
 
   // UI Elements
   let UI = {};
+  
+  // Load settings from localStorage
+  function loadSettings() {
+    try {
+      const savedInterval = localStorage.getItem('PS_SIGNAL_INTERVAL');
+      if (savedInterval) {
+        signalIntervalMinutes = parseInt(savedInterval, 10);
+        if (signalIntervalMinutes < 1) signalIntervalMinutes = 1;
+        if (signalIntervalMinutes > 10) signalIntervalMinutes = 10;
+      }
+      
+      const savedStats = localStorage.getItem('PS_STATS');
+      if (savedStats) {
+        const stats = JSON.parse(savedStats);
+        totalSignals = stats.total || 0;
+        winningSignals = stats.wins || 0;
+        losingSignals = stats.losses || 0;
+      }
+    } catch (e) {
+      console.warn('[Pocket Scout v3.0] Error loading settings:', e);
+    }
+  }
+  
+  // Save settings to localStorage
+  function saveSettings() {
+    try {
+      localStorage.setItem('PS_SIGNAL_INTERVAL', signalIntervalMinutes.toString());
+      localStorage.setItem('PS_STATS', JSON.stringify({
+        total: totalSignals,
+        wins: winningSignals,
+        losses: losingSignals
+      }));
+    } catch (e) {
+      console.warn('[Pocket Scout v3.0] Error saving settings:', e);
+    }
+  }
+  
+  // Calculate Win Rate
+  function calculateWinRate() {
+    if (totalSignals === 0) return 0;
+    return (winningSignals / totalSignals) * 100;
+  }
 
   // Read price from DOM
   function readPriceFromDom() {
@@ -86,7 +136,7 @@
         
         // Start cyclic engine after warmup
         if (window.CyclicDecisionEngine) {
-          window.CyclicDecisionEngine.initialize(generateSignal);
+          window.CyclicDecisionEngine.initialize(generateSignal, signalIntervalMinutes);
         }
       }
     } else {
@@ -118,9 +168,11 @@
     const macd = TI.calculateMACD(closes, 12, 26, 9);
     const ema9 = TI.calculateEMA(closes, 9);
     const ema21 = TI.calculateEMA(closes, 21);
+    const ema50 = TI.calculateEMA(closes, 50);
     const bb = TI.calculateBollingerBands(closes, 20, 2);
     const adx = TI.calculateADX(highs, lows, closes, 14);
     const atr = TI.calculateATR(highs, lows, closes, 14);
+    const stoch = TI.calculateStochastic(highs, lows, closes, 14, 3);
 
     if (!rsi || !macd || !ema9 || !ema21 || !bb || !adx || !atr) {
       return null;
@@ -128,65 +180,99 @@
 
     const currentPrice = closes[closes.length - 1];
     
-    // Vote system: each indicator votes BUY (+1), SELL (-1), or NEUTRAL (0)
-    let votes = 0;
-    let maxVotes = 0;
+    // Enhanced vote system with more flexible thresholds
+    let buyVotes = 0;
+    let sellVotes = 0;
+    let totalWeight = 0;
     const reasons = [];
 
-    // RSI vote
-    maxVotes++;
-    if (rsi < 30) {
-      votes++;
+    // RSI vote (weight: 1.5) - More flexible thresholds
+    const rsiWeight = 1.5;
+    totalWeight += rsiWeight;
+    if (rsi < 40) {
+      const strength = (40 - rsi) / 40; // 0-1 range
+      buyVotes += rsiWeight * strength;
       reasons.push(`RSI oversold (${rsi.toFixed(1)})`);
-    } else if (rsi > 70) {
-      votes--;
+    } else if (rsi > 60) {
+      const strength = (rsi - 60) / 40; // 0-1 range
+      sellVotes += rsiWeight * strength;
       reasons.push(`RSI overbought (${rsi.toFixed(1)})`);
     }
 
-    // MACD vote (histogram direction and value)
-    maxVotes++;
-    if (macd.histogram > 0) {
-      // Check if histogram is growing (compare with previous value)
-      votes++;
+    // MACD vote (weight: 2.0) - Strong indicator
+    const macdWeight = 2.0;
+    totalWeight += macdWeight;
+    const macdStrength = Math.min(1, Math.abs(macd.histogram) * 1000);
+    if (macd.histogram > 0 && macd.macd > macd.signal) {
+      buyVotes += macdWeight * macdStrength;
       reasons.push(`MACD bullish (${macd.histogram.toFixed(5)})`);
-    } else if (macd.histogram < 0) {
-      votes--;
+    } else if (macd.histogram < 0 && macd.macd < macd.signal) {
+      sellVotes += macdWeight * macdStrength;
       reasons.push(`MACD bearish (${macd.histogram.toFixed(5)})`);
     }
 
-    // EMA Crossover vote
-    maxVotes++;
-    if (ema9 > ema21) {
-      votes++;
+    // EMA Crossover vote (weight: 1.5)
+    const emaWeight = 1.5;
+    totalWeight += emaWeight;
+    const emaDiff = Math.abs(ema9 - ema21) / ema21;
+    const emaStrength = Math.min(1, emaDiff * 100);
+    if (ema9 > ema21 && currentPrice > ema9) {
+      buyVotes += emaWeight * emaStrength;
       reasons.push('EMA9 > EMA21 (bullish)');
-    } else if (ema9 < ema21) {
-      votes--;
+    } else if (ema9 < ema21 && currentPrice < ema9) {
+      sellVotes += emaWeight * emaStrength;
       reasons.push('EMA9 < EMA21 (bearish)');
     }
 
-    // Bollinger Bands vote
-    maxVotes++;
-    if (currentPrice <= bb.lower) {
-      votes++;
+    // Bollinger Bands vote (weight: 1.0)
+    const bbWeight = 1.0;
+    totalWeight += bbWeight;
+    const bbRange = bb.upper - bb.lower;
+    const bbPosition = (currentPrice - bb.lower) / bbRange; // 0-1 where price is in BB
+    if (bbPosition < 0.2) {
+      buyVotes += bbWeight * (0.2 - bbPosition) * 5; // Scale to 0-1
       reasons.push('Price at lower BB');
-    } else if (currentPrice >= bb.upper) {
-      votes--;
+    } else if (bbPosition > 0.8) {
+      sellVotes += bbWeight * (bbPosition - 0.8) * 5; // Scale to 0-1
       reasons.push('Price at upper BB');
     }
+    
+    // Stochastic vote (weight: 1.0) - Additional momentum confirmation
+    if (stoch) {
+      const stochWeight = 1.0;
+      totalWeight += stochWeight;
+      if (stoch.k < 30 && stoch.d < 30) {
+        const strength = (30 - stoch.k) / 30;
+        buyVotes += stochWeight * strength;
+        reasons.push(`Stochastic oversold (${stoch.k.toFixed(1)})`);
+      } else if (stoch.k > 70 && stoch.d > 70) {
+        const strength = (stoch.k - 70) / 30;
+        sellVotes += stochWeight * strength;
+        reasons.push(`Stochastic overbought (${stoch.k.toFixed(1)})`);
+      }
+    }
 
-    // ADX strengthens signal (if trend is strong)
-    let adxBoost = 0;
+    // ADX strengthens signal (multiplier, not vote)
+    let adxMultiplier = 1.0;
     if (adx.adx > 25) {
-      adxBoost = 0.1;
+      adxMultiplier = 1.0 + ((adx.adx - 25) / 100); // 1.0 to 1.75 range
       reasons.push(`ADX strong trend (${adx.adx.toFixed(1)})`);
     }
 
-    // Calculate confidence
-    const baseConfidence = (Math.abs(votes) / maxVotes) * 100;
-    const confidence = Math.min(95, Math.round(baseConfidence + (adxBoost * 100)));
+    // Calculate confidence based on vote strength
+    const buyConfidence = (buyVotes / totalWeight) * 100 * adxMultiplier;
+    const sellConfidence = (sellVotes / totalWeight) * 100 * adxMultiplier;
     
-    // Determine direction
-    const action = votes > 0 ? 'BUY' : votes < 0 ? 'SELL' : null;
+    let confidence = 0;
+    let action = null;
+    
+    if (buyVotes > sellVotes && buyConfidence >= 50) {
+      action = 'BUY';
+      confidence = Math.min(95, Math.round(buyConfidence));
+    } else if (sellVotes > buyVotes && sellConfidence >= 50) {
+      action = 'SELL';
+      confidence = Math.min(95, Math.round(sellConfidence));
+    }
     
     // Calculate duration based on ADX and volatility
     let duration = 3; // Base: 3 minutes
@@ -208,14 +294,16 @@
       action,
       confidence,
       duration,
-      reasons: reasons.slice(0, 5), // Limit to top 5 reasons
+      reasons: reasons.slice(0, 6), // Top 6 reasons
       price: currentPrice,
       volatility: volatilityRatio,
-      adxStrength: adx.adx
+      adxStrength: adx.adx,
+      rsi,
+      macdHistogram: macd.histogram
     };
   }
 
-  // Generate signal (called by cyclic engine every 10 minutes)
+  // Generate signal (called by cyclic engine)
   function generateSignal() {
     if (!warmupComplete) {
       console.log(`[Pocket Scout v3.0] ⏸️ Warmup in progress: ${ohlcM1.length}/${WARMUP_CANDLES} candles`);
@@ -232,8 +320,8 @@
       return;
     }
 
-    // Only display/publish signals with confidence >= 70%
-    if (analysis.confidence < 70) {
+    // Lower threshold to 60% to generate more signals
+    if (analysis.confidence < 60) {
       console.log(`[Pocket Scout v3.0] ⚠️ Signal confidence too low: ${analysis.confidence}%`);
       updateUI();
       return;
@@ -248,7 +336,10 @@
       price: analysis.price || lastPrice,
       timestamp: Date.now(),
       volatility: analysis.volatility,
-      adxStrength: analysis.adxStrength
+      adxStrength: analysis.adxStrength,
+      rsi: analysis.rsi,
+      macdHistogram: analysis.macdHistogram,
+      wr: calculateWinRate()
     };
 
     lastSignal = signal;
@@ -259,15 +350,15 @@
       signalHistory = signalHistory.slice(0, MAX_HISTORY);
     }
 
-    console.log(`[Pocket Scout v3.0] ✅ Signal generated: ${signal.action} | Conf: ${signal.confidence}% | Duration: ${signal.duration}min | Price: ${signal.price.toFixed(5)}`);
+    console.log(`[Pocket Scout v3.0] ✅ Signal generated: ${signal.action} | Conf: ${signal.confidence}% | WR: ${signal.wr.toFixed(1)}% | Duration: ${signal.duration}min | Price: ${signal.price.toFixed(5)}`);
     
     updateUI();
     
-    // Publish to Auto Trader if confidence >= 75%
-    if (signal.confidence >= 75) {
+    // Publish to Auto Trader if confidence >= 70%
+    if (signal.confidence >= 70) {
       publishToAutoTrader(signal);
     } else {
-      console.log(`[Pocket Scout v3.0] 📊 Signal displayed only (confidence ${signal.confidence}% < 75%)`);
+      console.log(`[Pocket Scout v3.0] 📊 Signal displayed only (confidence ${signal.confidence}% < 70%)`);
     }
   }
 
@@ -278,7 +369,9 @@
       confidence: signal.confidence,
       duration: signal.duration,
       timestamp: signal.timestamp,
-      entryPrice: signal.price
+      entryPrice: signal.price,
+      wr: signal.wr, // Win Rate for Auto Trader
+      expiry: signal.expiry
     };
 
     localStorage.setItem(FEED_KEY, JSON.stringify(feed));
@@ -373,6 +466,9 @@
     const bgColor = sig.action === 'BUY' ? '#064e3b' : '#7f1d1d';
 
     if (UI.signalDisplay) {
+      const wrValue = sig.wr || 0;
+      const wrColor = wrValue >= 60 ? '#10b981' : wrValue >= 50 ? '#f59e0b' : '#ef4444';
+      
       UI.signalDisplay.innerHTML = `
         <div style="background:${bgColor}; padding:14px; border-radius:10px; border:2px solid ${actionColor};">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
@@ -383,10 +479,14 @@
             </div>
           </div>
           
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px;">
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-bottom:10px;">
             <div style="background:rgba(0,0,0,0.3); padding:8px; border-radius:6px;">
               <div style="font-size:9px; opacity:0.7; margin-bottom:3px;">Confidence</div>
               <div style="font-size:18px; font-weight:700; color:#3b82f6;">${sig.confidence}%</div>
+            </div>
+            <div style="background:rgba(0,0,0,0.3); padding:8px; border-radius:6px;">
+              <div style="font-size:9px; opacity:0.7; margin-bottom:3px;">Win Rate</div>
+              <div style="font-size:18px; font-weight:700; color:${wrColor};">${wrValue.toFixed(1)}%</div>
             </div>
             <div style="background:rgba(0,0,0,0.3); padding:8px; border-radius:6px;">
               <div style="font-size:9px; opacity:0.7; margin-bottom:3px;">Entry Price</div>
@@ -405,8 +505,9 @@
           </div>
           
           <div style="font-size:10px; opacity:0.7; display:flex; justify-content:space-between;">
-            <span>Volatility: ${(sig.volatility * 100).toFixed(2)}%</span>
+            <span>Vol: ${(sig.volatility * 100).toFixed(2)}%</span>
             <span>ADX: ${sig.adxStrength.toFixed(1)}</span>
+            <span>Signals: ${totalSignals}</span>
           </div>
         </div>
       `;
@@ -525,6 +626,33 @@
       
       <div id="ps-status" style="padding:10px; background:#1e293b; border-radius:8px; margin-bottom:12px; font-size:12px; border:1px solid #334155;"></div>
       
+      <div style="padding:10px; background:#1e293b; border-radius:8px; margin-bottom:12px; border:1px solid #334155;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-size:11px; opacity:0.7;">Signal Interval:</span>
+          <span id="ps-interval-value" style="font-size:12px; font-weight:700; color:#3b82f6;">${signalIntervalMinutes} min</span>
+        </div>
+        <input type="range" id="ps-interval-slider" min="1" max="10" value="${signalIntervalMinutes}" 
+          style="width:100%; height:6px; border-radius:3px; background:#334155; outline:none; -webkit-appearance:none;">
+        <style>
+          #ps-interval-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #3b82f6;
+            cursor: pointer;
+          }
+          #ps-interval-slider::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #3b82f6;
+            cursor: pointer;
+            border: none;
+          }
+        </style>
+      </div>
+      
       <div id="ps-countdown"></div>
       
       <div style="margin-bottom:12px;">
@@ -535,7 +663,7 @@
       <div id="ps-history"></div>
       
       <div style="font-size:9px; opacity:0.5; text-align:center; margin-top:12px; padding-top:12px; border-top:1px solid #334155;">
-        10-Minute Cyclic Signals | Multi-Indicator Analysis
+        AI-Powered Multi-Indicator Analysis | WR: <span id="ps-wr-footer">${calculateWinRate().toFixed(1)}%</span>
       </div>
     `;
     
@@ -549,6 +677,27 @@
     UI.countdown = document.getElementById('ps-countdown');
     UI.signalDisplay = document.getElementById('ps-signal');
     UI.historyDisplay = document.getElementById('ps-history');
+    UI.wrFooter = document.getElementById('ps-wr-footer');
+    
+    // Setup interval slider
+    const intervalSlider = document.getElementById('ps-interval-slider');
+    const intervalValue = document.getElementById('ps-interval-value');
+    
+    intervalSlider.addEventListener('input', (e) => {
+      signalIntervalMinutes = parseInt(e.target.value, 10);
+      intervalValue.textContent = `${signalIntervalMinutes} min`;
+      saveSettings();
+      
+      // Restart cyclic engine with new interval
+      if (window.CyclicDecisionEngine && warmupComplete) {
+        window.CyclicDecisionEngine.stop();
+        window.CyclicDecisionEngine.initialize(generateSignal, signalIntervalMinutes);
+        console.log(`[Pocket Scout v3.0] Signal interval updated to ${signalIntervalMinutes} minutes`);
+      }
+    });
+  }
+    UI.signalDisplay = document.getElementById('ps-signal');
+    UI.historyDisplay = document.getElementById('ps-history');
   }
 
   // Start countdown timer update
@@ -556,13 +705,57 @@
     setInterval(() => {
       if (warmupComplete) {
         updateUI();
+        // Update WR footer
+        if (UI.wrFooter) {
+          UI.wrFooter.textContent = `${calculateWinRate().toFixed(1)}%`;
+        }
       }
     }, 1000); // Update every second
   }
+  
+  // Message handler for popup and result tracking
+  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.type === 'GET_METRICS') {
+      sendResponse({
+        metrics: {
+          winRate: calculateWinRate(),
+          totalSignals: totalSignals,
+          wins: winningSignals,
+          losses: losingSignals,
+          currentInterval: signalIntervalMinutes
+        },
+        lastSignal: lastSignal,
+        signalHistory: signalHistory.slice(0, 10),
+        candles: ohlcM1.length,
+        warmupComplete: warmupComplete
+      });
+      return true;
+    }
+    
+    if (message.type === 'SIGNAL_RESULT') {
+      // Track signal outcome from Auto Trader or manual verification
+      const { result } = message; // 'WIN' or 'LOSS'
+      totalSignals++;
+      if (result === 'WIN') {
+        winningSignals++;
+      } else if (result === 'LOSS') {
+        losingSignals++;
+      }
+      saveSettings();
+      console.log(`[Pocket Scout v3.0] Signal result: ${result} | WR: ${calculateWinRate().toFixed(1)}%`);
+      sendResponse({ success: true });
+      return true;
+    }
+    
+    return false;
+  });
 
   // Start processing
   function start() {
     console.log(`[Pocket Scout v3.0] Starting...`);
+    
+    // Load settings first
+    loadSettings();
     
     // Wait for dependencies
     const requiredDeps = [
