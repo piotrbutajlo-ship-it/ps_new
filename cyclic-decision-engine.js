@@ -6,12 +6,12 @@
 window.CyclicDecisionEngine = (function() {
   'use strict';
 
-  let currentIntervalMs = 600 * 1000; // Default 10 minutes (600 seconds)
+  let currentIntervalMs = 300 * 1000; // Default 5 minutes (300 seconds)
   let intervalId = null;
   let signalGenerationCallback = null;
   let lastCycleStartTime = 0;
 
-  function initialize(callback, intervalMinutes = 10) {
+  function initialize(callback, intervalMinutes = 5) {
     if (intervalId) {
       clearInterval(intervalId);
     }

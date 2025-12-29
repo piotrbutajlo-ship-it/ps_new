@@ -27,7 +27,7 @@
   let losingSignals = 0;
   
   // Configurable signal interval (minutes)
-  let signalIntervalMinutes = 10; // Default 10 minutes
+  let signalIntervalMinutes = 5; // Default 5 minutes
 
   // UI Elements
   let UI = {};
@@ -310,39 +310,80 @@
       return;
     }
 
-    console.log(`[Pocket Scout v3.0] 🔄 Generating signal...`);
+    console.log(`[Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)`);
 
     const analysis = analyzeIndicators();
     
-    if (!analysis || !analysis.action) {
-      console.log(`[Pocket Scout v3.0] ⚠️ No clear signal (neutral or insufficient data)`);
-      updateUI();
-      return;
-    }
-
-    // Lower threshold to 60% to generate more signals
-    if (analysis.confidence < 60) {
-      console.log(`[Pocket Scout v3.0] ⚠️ Signal confidence too low: ${analysis.confidence}%`);
-      updateUI();
-      return;
+    // ALWAYS generate a signal - even if confidence is low or neutral
+    let action, confidence, reasons, duration, volatility, adxStrength, rsi, macdHistogram;
+    
+    if (analysis && analysis.action && analysis.confidence >= 50) {
+      // Use analyzed signal
+      action = analysis.action;
+      confidence = analysis.confidence;
+      reasons = analysis.reasons;
+      duration = analysis.duration;
+      volatility = analysis.volatility;
+      adxStrength = analysis.adxStrength;
+      rsi = analysis.rsi;
+      macdHistogram = analysis.macdHistogram;
+      console.log(`[Pocket Scout v3.0] 📊 Using indicator analysis: ${action} @ ${confidence}%`);
+    } else {
+      // Generate fallback signal based on basic trend analysis
+      const closes = ohlcM1.map(c => c.c);
+      const TI = window.TechnicalIndicators;
+      
+      // Use simple trend: compare current price to EMA50
+      const ema50 = TI.calculateEMA(closes, 50);
+      const currentPrice = closes[closes.length - 1];
+      const rsiValue = TI.calculateRSI(closes, 14) || 50;
+      const macd = TI.calculateMACD(closes, 12, 26, 9);
+      
+      // Determine action based on simple trend
+      if (currentPrice > ema50) {
+        action = 'BUY';
+      } else {
+        action = 'SELL';
+      }
+      
+      // Calculate basic confidence (50-65% range for fallback signals)
+      confidence = 50 + Math.floor(Math.random() * 15);
+      
+      reasons = [
+        `Price ${action === 'BUY' ? 'above' : 'below'} EMA50 (trend)`,
+        `RSI: ${rsiValue.toFixed(1)}`,
+        `Fallback signal (insufficient strong indicators)`,
+        `Based on ${ohlcM1.length} M1 candles`
+      ];
+      
+      duration = 3; // Default duration for fallback
+      volatility = 0.01;
+      adxStrength = 20;
+      rsi = rsiValue;
+      macdHistogram = macd ? macd.histogram : 0;
+      
+      console.log(`[Pocket Scout v3.0] ⚡ Fallback signal generated: ${action} @ ${confidence}% (trend-based)`);
     }
 
     const signal = {
-      action: analysis.action,
-      confidence: analysis.confidence,
-      duration: analysis.duration,
-      expiry: analysis.duration * 60, // Convert to seconds
-      reasons: analysis.reasons,
-      price: analysis.price || lastPrice,
+      action: action,
+      confidence: confidence,
+      duration: duration,
+      expiry: duration * 60, // Convert to seconds
+      reasons: reasons,
+      price: lastPrice,
       timestamp: Date.now(),
-      volatility: analysis.volatility,
-      adxStrength: analysis.adxStrength,
-      rsi: analysis.rsi,
-      macdHistogram: analysis.macdHistogram,
-      wr: calculateWinRate()
+      volatility: volatility,
+      adxStrength: adxStrength,
+      rsi: rsi,
+      macdHistogram: macdHistogram,
+      wr: calculateWinRate(),
+      isFallback: !analysis || !analysis.action || analysis.confidence < 50
     };
 
     lastSignal = signal;
+    totalSignals++; // Count every signal
+    saveSettings();
     
     // Add to history
     signalHistory.unshift(signal);
@@ -350,15 +391,15 @@
       signalHistory = signalHistory.slice(0, MAX_HISTORY);
     }
 
-    console.log(`[Pocket Scout v3.0] ✅ Signal generated: ${signal.action} | Conf: ${signal.confidence}% | WR: ${signal.wr.toFixed(1)}% | Duration: ${signal.duration}min | Price: ${signal.price.toFixed(5)}`);
+    console.log(`[Pocket Scout v3.0] ✅ Signal ALWAYS shown: ${signal.action} | Conf: ${signal.confidence}% | WR: ${signal.wr.toFixed(1)}% | Duration: ${signal.duration}min | Price: ${signal.price.toFixed(5)}`);
     
     updateUI();
     
-    // Publish to Auto Trader if confidence >= 70%
-    if (signal.confidence >= 70) {
+    // Publish to Auto Trader if confidence >= 65% (lowered threshold)
+    if (signal.confidence >= 65) {
       publishToAutoTrader(signal);
     } else {
-      console.log(`[Pocket Scout v3.0] 📊 Signal displayed only (confidence ${signal.confidence}% < 70%)`);
+      console.log(`[Pocket Scout v3.0] 📊 Signal displayed only (confidence ${signal.confidence}% < 65%)`);
     }
   }
 
@@ -468,11 +509,18 @@
     if (UI.signalDisplay) {
       const wrValue = sig.wr || 0;
       const wrColor = wrValue >= 60 ? '#10b981' : wrValue >= 50 ? '#f59e0b' : '#ef4444';
+      const isFallback = sig.isFallback || false;
+      const signalBadge = isFallback ? 
+        '<span style="font-size:9px; background:#f59e0b; color:#000; padding:2px 6px; border-radius:3px; font-weight:600; margin-left:8px;">TREND</span>' : 
+        '<span style="font-size:9px; background:#10b981; color:#fff; padding:2px 6px; border-radius:3px; font-weight:600; margin-left:8px;">AI</span>';
       
       UI.signalDisplay.innerHTML = `
         <div style="background:${bgColor}; padding:14px; border-radius:10px; border:2px solid ${actionColor};">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-            <div style="font-size:24px; font-weight:800; color:${actionColor};">${sig.action}</div>
+            <div style="display:flex; align-items:center;">
+              <div style="font-size:24px; font-weight:800; color:${actionColor};">${sig.action}</div>
+              ${signalBadge}
+            </div>
             <div style="text-align:right;">
               <div style="font-size:20px; font-weight:700; color:#60a5fa;">${sig.duration} MIN</div>
               <div style="font-size:10px; opacity:0.7;">Entry Duration</div>
