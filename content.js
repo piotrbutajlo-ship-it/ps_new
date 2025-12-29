@@ -37,6 +37,11 @@
     bestTimeOfDay: {},
     bestConfidenceRange: {}
   };
+  
+  // Multi-Timeframe buffers
+  let ohlcM5 = [];
+  let ohlcM15 = [];
+  let currentMarketRegime = 'TRENDING';
 
   // UI Elements
   let UI = {};
@@ -165,9 +170,148 @@
     }
     
     updateStatusDisplay();
+    
+    // Build multi-timeframe candles
+    buildMultiTimeframeCandles();
+  }
+  
+  // Build M5 and M15 candles from M1 data
+  function buildMultiTimeframeCandles() {
+    if (ohlcM1.length < 5) return;
+    
+    // Build M5 candles (5 M1 candles = 1 M5 candle)
+    ohlcM5 = [];
+    for (let i = 0; i + 5 <= ohlcM1.length; i += 5) {
+      const chunk = ohlcM1.slice(i, i + 5);
+      ohlcM5.push({
+        o: chunk[0].o,
+        h: Math.max(...chunk.map(c => c.h)),
+        l: Math.min(...chunk.map(c => c.l)),
+        c: chunk[4].c,
+        t: chunk[0].t
+      });
+    }
+    
+    // Build M15 candles (15 M1 candles = 1 M15 candle)
+    ohlcM15 = [];
+    for (let i = 0; i + 15 <= ohlcM1.length; i += 15) {
+      const chunk = ohlcM1.slice(i, i + 15);
+      ohlcM15.push({
+        o: chunk[0].o,
+        h: Math.max(...chunk.map(c => c.h)),
+        l: Math.min(...chunk.map(c => c.l)),
+        c: chunk[14].c,
+        t: chunk[0].t
+      });
+    }
+  }
+  
+  // Detect market regime: TRENDING, RANGING, or VOLATILE
+  function detectMarketRegime(closes, highs, lows) {
+    const TI = window.TechnicalIndicators;
+    const adx = TI.calculateADX(highs, lows, closes, 14);
+    const atr = TI.calculateATR(highs, lows, closes, 14);
+    
+    if (!adx || !atr) return 'TRENDING';
+    
+    const volatility = atr / closes[closes.length - 1];
+    
+    // Determine regime
+    if (volatility > 0.02) {
+      return 'VOLATILE'; // High volatility - chaotic market
+    } else if (adx.adx > 25) {
+      return 'TRENDING'; // Strong trend
+    } else if (adx.adx < 20) {
+      return 'RANGING'; // Consolidation/sideways
+    }
+    
+    return 'TRENDING'; // Default
+  }
+  
+  // Adjust indicator weights based on market regime
+  function getRegimeAdjustedWeights(regime) {
+    const baseWeights = { ...learningData.indicatorWeights };
+    
+    if (regime === 'TRENDING') {
+      // Boost trend-following indicators
+      baseWeights.macd *= 1.3;
+      baseWeights.ema *= 1.2;
+      baseWeights.rsi *= 0.8; // Reduce mean-reversion
+      baseWeights.stoch *= 0.8;
+    } else if (regime === 'RANGING') {
+      // Boost mean-reversion indicators
+      baseWeights.rsi *= 1.3;
+      baseWeights.stoch *= 1.2;
+      baseWeights.bb *= 1.2;
+      baseWeights.macd *= 0.8; // Reduce trend-following
+      baseWeights.ema *= 0.8;
+    } else if (regime === 'VOLATILE') {
+      // Be more conservative in volatile markets
+      baseWeights.rsi *= 0.9;
+      baseWeights.macd *= 0.9;
+      baseWeights.ema *= 0.9;
+      baseWeights.bb *= 1.1; // BB works well in volatile
+      baseWeights.stoch *= 0.9;
+    }
+    
+    return baseWeights;
+  }
+  
+  // Check timeframe alignment for confidence boost
+  function checkTimeframeAlignment(m1Action, m5Action, m15Action) {
+    let agreement = 0;
+    
+    if (m1Action === m5Action) agreement++;
+    if (m1Action === m15Action) agreement++;
+    if (m5Action === m15Action) agreement++;
+    
+    // Return alignment score and boost
+    if (agreement === 3) {
+      return { score: 3, boost: 20, description: 'All TFs agree' }; // Perfect alignment
+    } else if (agreement === 2) {
+      return { score: 2, boost: 10, description: '2 TFs agree' }; // Good alignment
+    } else if (agreement === 1) {
+      return { score: 1, boost: 0, description: 'Partial agreement' }; // Neutral
+    } else {
+      return { score: 0, boost: -5, description: 'TF conflict' }; // Conflict
+    }
+  }
+  
+  // Analyze single timeframe
+  function analyzeSingleTimeframe(candles) {
+    if (candles.length < 50) return null;
+    
+    const TI = window.TechnicalIndicators;
+    const closes = candles.map(c => c.c);
+    const highs = candles.map(c => c.h);
+    const lows = candles.map(c => c.l);
+    
+    const rsi = TI.calculateRSI(closes, 14);
+    const macd = TI.calculateMACD(closes, 12, 26, 9);
+    const ema9 = TI.calculateEMA(closes, 9);
+    const ema21 = TI.calculateEMA(closes, 21);
+    
+    if (!rsi || !macd || !ema9 || !ema21) return null;
+    
+    // Simple direction determination
+    let buyScore = 0;
+    let sellScore = 0;
+    
+    if (rsi < 40) buyScore++;
+    else if (rsi > 60) sellScore++;
+    
+    if (macd.histogram > 0) buyScore++;
+    else if (macd.histogram < 0) sellScore++;
+    
+    if (ema9 > ema21) buyScore++;
+    else if (ema9 < ema21) sellScore++;
+    
+    if (buyScore > sellScore) return 'BUY';
+    else if (sellScore > buyScore) return 'SELL';
+    else return 'NEUTRAL';
   }
 
-  // Calculate confidence based on indicator consensus
+  // Calculate confidence based on indicator consensus + Multi-Timeframe + Market Regime
   function analyzeIndicators() {
     if (!warmupComplete || ohlcM1.length < WARMUP_CANDLES) {
       return null;
@@ -177,6 +321,13 @@
     const closes = ohlcM1.map(c => c.c);
     const highs = ohlcM1.map(c => c.h);
     const lows = ohlcM1.map(c => c.l);
+    
+    // 1. DETECT MARKET REGIME
+    currentMarketRegime = detectMarketRegime(closes, highs, lows);
+    console.log(`[Pocket Scout v3.0] 🌊 Market Regime: ${currentMarketRegime}`);
+
+    // 2. GET REGIME-ADJUSTED WEIGHTS
+    const weights = getRegimeAdjustedWeights(currentMarketRegime);
 
     // Calculate all indicators
     const rsi = TI.calculateRSI(closes, 14);
@@ -195,14 +346,14 @@
 
     const currentPrice = closes[closes.length - 1];
     
-    // Enhanced vote system with learned weights
+    // Enhanced vote system with REGIME-ADJUSTED weights
     let buyVotes = 0;
     let sellVotes = 0;
     let totalWeight = 0;
     const reasons = [];
 
-    // RSI vote - Use learned weight
-    const rsiWeight = learningData.indicatorWeights.rsi;
+    // RSI vote - Use regime-adjusted weight
+    const rsiWeight = weights.rsi;
     totalWeight += rsiWeight;
     if (rsi < 40) {
       const strength = (40 - rsi) / 40; // 0-1 range
@@ -214,8 +365,8 @@
       reasons.push(`RSI overbought (${rsi.toFixed(1)})`);
     }
 
-    // MACD vote - Use learned weight
-    const macdWeight = learningData.indicatorWeights.macd;
+    // MACD vote - Use regime-adjusted weight
+    const macdWeight = weights.macd;
     totalWeight += macdWeight;
     const macdStrength = Math.min(1, Math.abs(macd.histogram) * 1000);
     if (macd.histogram > 0 && macd.macd > macd.signal) {
@@ -226,8 +377,8 @@
       reasons.push(`MACD bearish (${macd.histogram.toFixed(5)})`);
     }
 
-    // EMA Crossover vote - Use learned weight
-    const emaWeight = learningData.indicatorWeights.ema;
+    // EMA Crossover vote - Use regime-adjusted weight
+    const emaWeight = weights.ema;
     totalWeight += emaWeight;
     const emaDiff = Math.abs(ema9 - ema21) / ema21;
     const emaStrength = Math.min(1, emaDiff * 100);
@@ -239,8 +390,8 @@
       reasons.push('EMA9 < EMA21 (bearish)');
     }
 
-    // Bollinger Bands vote - Use learned weight
-    const bbWeight = learningData.indicatorWeights.bb;
+    // Bollinger Bands vote - Use regime-adjusted weight
+    const bbWeight = weights.bb;
     totalWeight += bbWeight;
     const bbRange = bb.upper - bb.lower;
     const bbPosition = (currentPrice - bb.lower) / bbRange; // 0-1 where price is in BB
@@ -252,9 +403,9 @@
       reasons.push('Price at upper BB');
     }
     
-    // Stochastic vote - Use learned weight
+    // Stochastic vote - Use regime-adjusted weight
     if (stoch) {
-      const stochWeight = learningData.indicatorWeights.stoch;
+      const stochWeight = weights.stoch;
       totalWeight += stochWeight;
       if (stoch.k < 30 && stoch.d < 30) {
         const strength = (30 - stoch.k) / 30;
@@ -274,19 +425,55 @@
       reasons.push(`ADX strong trend (${adx.adx.toFixed(1)})`);
     }
 
-    // Calculate confidence based on vote strength
+    // Calculate base confidence based on vote strength
     const buyConfidence = (buyVotes / totalWeight) * 100 * adxMultiplier;
     const sellConfidence = (sellVotes / totalWeight) * 100 * adxMultiplier;
+    
+    //  3. MULTI-TIMEFRAME ANALYSIS
+    let mtfBoost = 0;
+    let mtfDescription = 'M1 only';
+    
+    if (ohlcM5.length >= 10 && ohlcM15.length >= 3) {
+      const m1Action = buyConfidence > sellConfidence ? 'BUY' : 'SELL';
+      const m5Action = analyzeSingleTimeframe(ohlcM5);
+      const m15Action = analyzeSingleTimeframe(ohlcM15);
+      
+      const alignment = checkTimeframeAlignment(m1Action, m5Action, m15Action);
+      mtfBoost = alignment.boost;
+      mtfDescription = `M1:${m1Action} M5:${m5Action || '-'} M15:${m15Action || '-'} (${alignment.description})`;
+      
+      console.log(`[Pocket Scout v3.0] ⏱️ Timeframes: ${mtfDescription}`);
+      reasons.push(`MTF: ${alignment.description} (${alignment.boost > 0 ? '+' : ''}${alignment.boost}%)`);
+    }
+    
+    // 4. APPLY REGIME CONFIDENCE BOOST
+    let regimeBoost = 0;
+    if (currentMarketRegime === 'TRENDING') {
+      regimeBoost = 15;
+      reasons.push('Regime: TRENDING (+15%)');
+    } else if (currentMarketRegime === 'RANGING') {
+      regimeBoost = 10;
+      reasons.push('Regime: RANGING (+10%)');
+    } else if (currentMarketRegime === 'VOLATILE') {
+      regimeBoost = -10;
+      reasons.push('Regime: VOLATILE (-10%)');
+    }
     
     let confidence = 0;
     let action = null;
     
-    if (buyVotes > sellVotes && buyConfidence >= 50) {
+    // Apply all boosts
+    const finalBuyConfidence = Math.min(95, Math.round(buyConfidence + mtfBoost + regimeBoost));
+    const finalSellConfidence = Math.min(95, Math.round(sellConfidence + mtfBoost + regimeBoost));
+    
+    if (buyVotes > sellVotes && finalBuyConfidence >= 50) {
       action = 'BUY';
-      confidence = Math.min(95, Math.round(buyConfidence));
-    } else if (sellVotes > buyVotes && sellConfidence >= 50) {
+      confidence = finalBuyConfidence;
+      console.log(`[Pocket Scout v3.0] 💰 Signal: BUY | Base: ${Math.round(buyConfidence)}% | MTF: ${mtfBoost > 0 ? '+' : ''}${mtfBoost}% | Regime: ${regimeBoost > 0 ? '+' : ''}${regimeBoost}% | Final: ${confidence}%`);
+    } else if (sellVotes > buyVotes && finalSellConfidence >= 50) {
       action = 'SELL';
-      confidence = Math.min(95, Math.round(sellConfidence));
+      confidence = finalSellConfidence;
+      console.log(`[Pocket Scout v3.0] 💰 Signal: SELL | Base: ${Math.round(sellConfidence)}% | MTF: ${mtfBoost > 0 ? '+' : ''}${mtfBoost}% | Regime: ${regimeBoost > 0 ? '+' : ''}${regimeBoost}% | Final: ${confidence}%`);
     }
     
     // Calculate duration based on ADX and volatility
@@ -309,12 +496,14 @@
       action,
       confidence,
       duration,
-      reasons: reasons.slice(0, 6), // Top 6 reasons
+      reasons: reasons.slice(0, 8), // Top 8 reasons (more details)
       price: currentPrice,
       volatility: volatilityRatio,
       adxStrength: adx.adx,
       rsi,
-      macdHistogram: macd.histogram
+      macdHistogram: macd.histogram,
+      regime: currentMarketRegime,
+      mtfAlignment: mtfDescription
     };
   }
 
@@ -683,6 +872,7 @@
     if (!UI.panel) return;
     
     updateStatusDisplay();
+    updateAnalyticsDisplay(); // Add analytics update
 
     if (!warmupComplete) {
       const progress = Math.min(100, (ohlcM1.length / WARMUP_CANDLES) * 100);
@@ -738,9 +928,20 @@
       const wrValue = sig.wr || 0;
       const wrColor = wrValue >= 60 ? '#10b981' : wrValue >= 50 ? '#f59e0b' : '#ef4444';
       const isFallback = sig.isFallback || false;
+      
+      // Badge logic
       const signalBadge = isFallback ? 
         '<span style="font-size:9px; background:#f59e0b; color:#000; padding:2px 6px; border-radius:3px; font-weight:600; margin-left:8px;">TREND</span>' : 
         '<span style="font-size:9px; background:#10b981; color:#fff; padding:2px 6px; border-radius:3px; font-weight:600; margin-left:8px;">AI</span>';
+      
+      // Regime badge
+      const regimeColors = {
+        'TRENDING': { bg: '#3b82f6', text: '#fff' },
+        'RANGING': { bg: '#f59e0b', text: '#000' },
+        'VOLATILE': { bg: '#ef4444', text: '#fff' }
+      };
+      const regimeColor = regimeColors[sig.regime || 'TRENDING'];
+      const regimeBadge = `<span style="font-size:8px; background:${regimeColor.bg}; color:${regimeColor.text}; padding:2px 6px; border-radius:3px; font-weight:600; margin-left:4px;">${sig.regime || 'TREND'}</span>`;
       
       UI.signalDisplay.innerHTML = `
         <div style="background:${bgColor}; padding:14px; border-radius:10px; border:2px solid ${actionColor};">
@@ -748,6 +949,7 @@
             <div style="display:flex; align-items:center;">
               <div style="font-size:24px; font-weight:800; color:${actionColor};">${sig.action}</div>
               ${signalBadge}
+              ${regimeBadge}
             </div>
             <div style="text-align:right;">
               <div style="font-size:20px; font-weight:700; color:#60a5fa;">${sig.duration} MIN</div>
@@ -821,6 +1023,86 @@
         </div>
       `;
     }
+  }
+  
+  // Update analytics display
+  function updateAnalyticsDisplay() {
+    const analyticsContent = document.getElementById('ps-analytics-content');
+    if (!analyticsContent) return;
+    
+    // Calculate indicator effectiveness
+    let topIndicators = [];
+    if (totalSignals > 0 && learningData.successfulPatterns.length > 0) {
+      const indicatorWRs = {
+        RSI: 0,
+        MACD: 0,
+        EMA: 0,
+        BB: 0,
+        Stoch: 0
+      };
+      
+      // Count successful patterns for each indicator
+      learningData.successfulPatterns.forEach(pattern => {
+        if (pattern.rsi < 40 || pattern.rsi > 60) indicatorWRs.RSI++;
+        if (Math.abs(pattern.macd) > 0.0001) indicatorWRs.MACD++;
+        if (pattern.ema9 && pattern.ema21) indicatorWRs.EMA++;
+      });
+      
+      topIndicators = Object.entries(indicatorWRs)
+        .map(([name, count]) => ({ name, wr: winningSignals > 0 ? (count / winningSignals * 100).toFixed(1) : 0 }))
+        .sort((a, b) => b.wr - a.wr)
+        .slice(0, 3);
+    }
+    
+    // Best trading hours
+    let bestHour = '--';
+    let bestHourWR = 0;
+    if (Object.keys(learningData.bestTimeOfDay).length > 0) {
+      const hours = Object.entries(learningData.bestTimeOfDay)
+        .map(([hour, stats]) => ({
+          hour,
+          wr: stats.wins && stats.wins + stats.losses > 0 ? (stats.wins / (stats.wins + stats.losses) * 100).toFixed(1) : 0
+        }))
+        .sort((a, b) => b.wr - a.wr);
+      
+      if (hours.length > 0) {
+        bestHour = hours[0].hour + ':00';
+        bestHourWR = hours[0].wr;
+      }
+    }
+    
+    analyticsContent.innerHTML = `
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:6px;">
+        <div>
+          <div style="opacity:0.7; margin-bottom:2px;">Market Regime:</div>
+          <div style="font-weight:700; color:#3b82f6;">${currentMarketRegime}</div>
+        </div>
+        <div>
+          <div style="opacity:0.7; margin-bottom:2px;">MTF Status:</div>
+          <div style="font-weight:700; color:#10b981;">${ohlcM5.length >= 10 && ohlcM15.length >= 3 ? 'Active' : 'Building'}</div>
+        </div>
+      </div>
+      ${topIndicators.length > 0 ? `
+        <div style="margin-bottom:6px;">
+          <div style="opacity:0.7; margin-bottom:3px;">Top Indicators:</div>
+          <div style="display:flex; gap:4px; flex-wrap:wrap;">
+            ${topIndicators.map(ind => 
+              `<span style="background:#3b82f6; color:#fff; padding:2px 6px; border-radius:3px; font-size:9px;">${ind.name} ${ind.wr}%</span>`
+            ).join('')}
+          </div>
+        </div>
+      ` : ''}
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+        <div>
+          <div style="opacity:0.7; margin-bottom:2px;">Best Hour:</div>
+          <div style="font-weight:700; color:#f59e0b;">${bestHour} ${bestHourWR > 0 ? `(${bestHourWR}%)` : ''}</div>
+        </div>
+        <div>
+          <div style="opacity:0.7; margin-bottom:2px;">Patterns:</div>
+          <div style="font-weight:700; color:#10b981;">${learningData.successfulPatterns.length + learningData.failedPatterns.length}</div>
+        </div>
+      </div>
+    `;
   }
 
   // Make panel draggable
@@ -935,6 +1217,11 @@
             border: none;
           }
         </style>
+      </div>
+      
+      <div id="ps-analytics" style="padding:10px; background:#1e293b; border-radius:8px; margin-bottom:12px; border:1px solid #334155;">
+        <div style="font-size:10px; font-weight:600; color:#60a5fa; margin-bottom:8px;">📊 ANALYTICS</div>
+        <div id="ps-analytics-content" style="font-size:10px;"></div>
       </div>
       
       <div id="ps-countdown"></div>
