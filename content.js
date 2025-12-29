@@ -696,9 +696,6 @@
       }
     });
   }
-    UI.signalDisplay = document.getElementById('ps-signal');
-    UI.historyDisplay = document.getElementById('ps-history');
-  }
 
   // Start countdown timer update
   function startCountdownTimer() {
