@@ -1,15 +1,16 @@
 /**
- * Pocket Scout Dynamic Time - Main Content Script
- * Dynamic timing windows (1-5 min) for optimal signal entry
+ * Pocket Scout v3.0 - Main Content Script
+ * 10-Minute Cyclic Signals with Multi-Indicator Analysis
+ * by Claude Opus
  */
 
 (function() {
   'use strict';
 
-  const VERSION = '2.1.0';
+  const VERSION = '3.0.0';
   const FEED_KEY = 'PS_AT_FEED';
-  const WARMUP_MINUTES = 50; // Optimal warmup: 50 minutes
-  const WARMUP_CANDLES = WARMUP_MINUTES; // 1 candle per minute
+  const WARMUP_MINUTES = 50; // Need 50 M1 candles for indicators
+  const WARMUP_CANDLES = WARMUP_MINUTES;
 
   // State
   const circularBuffer = window.CircularBuffer.getInstance();
@@ -17,104 +18,38 @@
   let lastPrice = null;
   let warmupComplete = false;
   let lastSignal = null;
-  let lastRegime = null;
-  let pendingSignalData = null; // Signal waiting for optimal timing
-  let signalLocked = false; // Lock to prevent overlapping signals
-  let timingMonitorInterval = null;
-  let signalUnlockTimeout = null; // Timeout to auto-unlock signal generation
-  let signalVerificationTimeouts = new Map(); // Track verification timeouts for each signal
-  let lastFeedCheck = null; // Track last feed check time
-  let cachedSeries = null; // cached OHLC arrays for latency reduction
-  let cachedVersion = null; // track last candle time for cache invalidation
-  let gateRejectStreak = 0; // track consecutive gate rejections to enable soft exploration
-  const GLOBAL_THRESHOLDS = window.PocketScoutThresholds || {};
-  const VOL_RISK_LOW = GLOBAL_THRESHOLDS.VOL_RISK_LOW || 0.002;
-  const VOL_RISK_ELEVATED = GLOBAL_THRESHOLDS.VOL_RISK_ELEVATED || 0.012;
-  const VOL_RISK_EXTREME = GLOBAL_THRESHOLDS.VOL_RISK_EXTREME || 0.02;
+  let signalHistory = [];
+  const MAX_HISTORY = 10;
 
   // UI Elements
   let UI = {};
 
-  // Cache helper to avoid repeated array construction
-  function refreshSeries() {
-    cachedSeries = {
-      closes: ohlcM1.map(c => c.c),
-      highs: ohlcM1.map(c => c.h),
-      lows: ohlcM1.map(c => c.l),
-      opens: ohlcM1.map(c => c.o),
-      candles: ohlcM1
-    };
-    cachedVersion = ohlcM1.length ? ohlcM1[ohlcM1.length - 1].t : null;
-  }
-
-  function getSeries() {
-    const latestVersion = ohlcM1.length ? ohlcM1[ohlcM1.length - 1].t : null;
-    if (!cachedSeries || cachedVersion !== latestVersion) {
-      refreshSeries();
-    }
-    return cachedSeries;
-  }
-
-  function getRiskSummary() {
-    if (!ohlcM1 || ohlcM1.length < 20 || !window.TechnicalIndicators) return null;
-    const { closes, highs, lows } = getSeries();
-    const TI = window.TechnicalIndicators;
-    const atr = TI.calculateATR(highs, lows, closes, 14);
-    const avgPrice = closes.slice(-20).reduce((a, b) => a + b, 0) / 20;
-    if (!atr || !avgPrice) return null;
-    const ratio = atr / avgPrice;
-    let level = 'BALANCED';
-    if (ratio < VOL_RISK_LOW) level = 'LOW';
-    else if (ratio > VOL_RISK_EXTREME) level = 'EXTREME';
-    else if (ratio > VOL_RISK_ELEVATED) level = 'HIGH';
-    return { ratio, level };
-  }
-
-  function getPatternSummary() {
-    if (!ohlcM1 || ohlcM1.length < 2 || !window.TechnicalIndicators) return null;
-    return window.TechnicalIndicators.detectCandlestickPatterns(ohlcM1.slice(-3));
-  }
-
-  // Read price from DOM - ROBUST VERSION
+  // Read price from DOM
   function readPriceFromDom() {
-    // Primary reliable selectors for Pocket Option
     const selectors = [
-      '.current-rate-value',             // New platform version
-      '.current-rate__value',            // Standard
-      '.chart-rate__value',              // Chart specific
-      '.rate-value',                     // Generic
-      '[data-role="current-rate"]',      // Data attribute
-      '.assets-table__cell--rate',       // Asset table
-      '.strike-rate__value',             // Strike price
-      'span.open-time-number',           // Legacy
-      '#price',                          // Fallback ID
-      '.current-price'                   // Fallback class
+      '.current-rate-value',
+      '.current-rate__value',
+      '.chart-rate__value',
+      '.rate-value',
+      '[data-role="current-rate"]',
+      '.assets-table__cell--rate',
+      '.strike-rate__value',
+      'span.open-time-number',
+      '#price',
+      '.current-price'
     ];
     
     for (const selector of selectors) {
       const elements = document.querySelectorAll(selector);
       for (const element of elements) {
-        // Check visibility
         if (element.offsetParent === null) continue;
         
         const text = element.textContent.trim().replace(/[^0-9.]/g, '');
         const price = parseFloat(text);
         
-        // Basic validation for currency pairs (must be positive, likely between 0.5 and 200 for forex/crypto)
         if (!isNaN(price) && price > 0) {
           return price;
         }
-      }
-    }
-    
-    // Fallback: Try to find any text node that looks like a price in the chart container
-    const chartContainer = document.querySelector('.chart-container') || document.body;
-    if (chartContainer) {
-      // Regex for price pattern like 1.23456 or 150.25
-      const priceRegex = /\b\d+\.\d{2,6}\b/;
-      const matches = chartContainer.innerText.match(priceRegex);
-      if (matches && matches.length > 0) {
-        return parseFloat(matches[0]);
       }
     }
     
@@ -126,8 +61,6 @@
     if (!price || isNaN(price)) return;
     
     lastPrice = price;
-    
-    // Update UI status with price and candle info
     updateStatusDisplay();
     
     const candleTime = Math.floor(timestamp / 60000) * 60000;
@@ -144,19 +77,17 @@
       };
       circularBuffer.add(newCandle);
       ohlcM1 = circularBuffer.getAll();
-      refreshSeries();
       
       // Check warmup
       if (!warmupComplete && ohlcM1.length >= WARMUP_CANDLES) {
         warmupComplete = true;
-        console.log(`[Pocket Scout Dynamic Time] ✅ Warmup complete! ${ohlcM1.length} candles`);
-        if (window.RLIntegration && window.RLIntegration.warmupBanditFromHistory) {
-          window.RLIntegration.warmupBanditFromHistory(ohlcM1);
+        console.log(`[Pocket Scout v3.0] ✅ Warmup complete! ${ohlcM1.length} candles`);
+        updateStatusDisplay();
+        
+        // Start cyclic engine after warmup
+        if (window.CyclicDecisionEngine) {
+          window.CyclicDecisionEngine.initialize(generateSignal);
         }
-        updateStatusDisplay();
-        updateUI([]);
-      } else {
-        updateStatusDisplay();
       }
     } else {
       // Update last candle
@@ -166,676 +97,201 @@
         c: price
       });
       ohlcM1 = circularBuffer.getAll();
-      refreshSeries();
-      updateStatusDisplay();
     }
-
-    // If we're warmed up and idle, start a timing window automatically
-    if (warmupComplete && !signalLocked && !pendingSignalData) {
-      const timingActive = window.SignalTimingController && window.SignalTimingController.isActive && window.SignalTimingController.isActive();
-      if (!timingActive) {
-        prepareSignalForTiming();
-      }
-    }
+    
+    updateStatusDisplay();
   }
 
-  // Prepare signal and start timing window (called after signal verification)
-  function prepareSignalForTiming() {
-    if (!warmupComplete) {
-      console.log(`[Pocket Scout Dynamic Time] ⏸️ Warmup in progress: ${ohlcM1.length}/${WARMUP_CANDLES} candles`);
-      return;
-    }
-
-    if (ohlcM1.length < 50) {
-      console.log(`[Pocket Scout Dynamic Time] ⏸️ Insufficient candles: ${ohlcM1.length}/50`);
-      return;
-    }
-
-    if (signalLocked) {
-      console.log(`[Pocket Scout Dynamic Time] ⏸️ Signal generation locked (waiting for outcome)`);
-      return;
-    }
-
-    console.log(`[Pocket Scout Dynamic Time] 🔄 Preparing signal for timing window`);
-
-    // Update regime
-    if (window.MarketRegimeDetector) {
-      const regimeResult = window.MarketRegimeDetector.updateRegime(ohlcM1);
-      lastRegime = regimeResult.regime || window.MarketRegimeDetector.getCurrentRegime();
-    }
-
-    // Start an analysis window without locking direction; final decision happens at expiry
-    const series = getSeries();
-    const { closes } = series;
-    const fallbackPrice = lastPrice || (closes.length ? closes[closes.length - 1] : null);
-
-    pendingSignalData = {
-      action: 'TBD',
-      groupId: 'ANALYSIS_WINDOW',
-      groupName: 'Analyzing market',
-      price: fallbackPrice,
-      expiry: 300,
-      minutes: 5,
-      timestamp: Date.now(),
-      reasons: [],
-      risk: getRiskSummary(),
-      patterns: getPatternSummary()
-    };
-
-    signalLocked = true;
-    
-    if (window.SignalTimingController) {
-      window.SignalTimingController.startTimingWindow(pendingSignalData, ohlcM1, lastRegime);
-      console.log(`[Pocket Scout Dynamic Time] ⏱️ Timing window started (analysis-first, direction decided at publish)`);
-      updateUI([]); // Show timing status
-    }
-  }
-
-  // Enhanced signal validation
-  function validateSignal(signal, ohlcData, regimeData) {
-    if (!signal || !ohlcData || ohlcData.length < 50) {
-      return { valid: false, reason: 'Insufficient data' };
-    }
-
-    const { closes, highs, lows } = getSeries();
-    const TI = window.TechnicalIndicators;
-
-    // 1. Check volatility filter
-    const atr = TI.calculateATR(highs, lows, closes, 14);
-    const avgPrice = closes.slice(-20).reduce((a, b) => a + b, 0) / 20;
-    if (atr && avgPrice > 0) {
-      const volatilityRatio = (atr / avgPrice) * 100;
-      if (volatilityRatio > 3.0) { // Extreme volatility
-        return { valid: false, reason: `Extreme volatility: ${volatilityRatio.toFixed(2)}%` };
-      }
-    }
-
-    // 2. Check trend strength (if ADX available)
-    const adx = TI.calculateADX(highs, lows, closes, 14);
-    if (adx && adx.adx < 15) {
-      // Very weak trend - might be choppy market
-      // Allow but note it
-      console.log(`[Pocket Scout Dynamic Time] ⚠️ Weak trend (ADX: ${adx.adx.toFixed(1)})`);
-    }
-
-    // 3. Check price movement consistency
-    if (closes.length >= 5) {
-      const recent = closes.slice(-5);
-      const priceChange = Math.abs((recent[recent.length - 1] - recent[0]) / recent[0]);
-      if (priceChange > 0.02) { // More than 2% move in 5 candles
-        return { valid: false, reason: `Excessive price movement: ${(priceChange * 100).toFixed(2)}%` };
-      }
-    }
-
-    // 4. Check regime stability
-    if (regimeData) {
-      const stability = window.MarketRegimeDetector.getRegimeStability();
-      if (stability < 20) {
-        return { valid: false, reason: `Unstable regime: ${stability.toFixed(1)}%` };
-      }
-    }
-
-    return { valid: true, reason: 'Signal validated' };
-  }
-
-  // Monitor timing window and publish when optimal
-  function monitorTimingWindow() {
-    if (!window.SignalTimingController || !pendingSignalData) return;
-    
-    // Update regime for current evaluation
-    if (window.MarketRegimeDetector) {
-      const regimeResult = window.MarketRegimeDetector.updateRegime(ohlcM1);
-      lastRegime = regimeResult.regime || window.MarketRegimeDetector.getCurrentRegime();
-    }
-
-    // Check freshness: cancel if price flips against bias after selection
-    const series = getSeries();
-    const { closes } = series;
-    if (pendingSignalData && pendingSignalData.action && pendingSignalData.action !== 'TBD' && closes.length >= 2) {
-      const TI = window.TechnicalIndicators;
-      const bb = TI.calculateBollingerBands(closes, 20, 2);
-      const ema21 = TI.calculateEMA(closes, 21);
-      const lastClose = closes[closes.length - 1];
-      const biasAgainst = (action) => {
-        if (!bb || !ema21) return false;
-        if (action === 'BUY') {
-          return lastClose < bb.middle && lastClose < ema21;
-        }
-        if (action === 'SELL') {
-          return lastClose > bb.middle && lastClose > ema21;
-        }
-        return false;
-      };
-      if (biasAgainst(pendingSignalData.action)) {
-        console.log('[Pocket Scout Dynamic Time] 🔁 Bias flipped against signal during window, cancelling');
-        cancelPendingSignal();
-        return;
-      }
-    }
-
-    // Check if window expired first (even if not active, we need to publish)
-    if (window.SignalTimingController.hasExpired()) {
-      // At expiry, pick the best current direction (analysis-first approach)
-      publishPendingSignal();
-      return;
-    }
-    
-    // If window is not active, don't continue monitoring
-    if (!window.SignalTimingController.isActive()) {
-      return;
-    }
-
-    // Update UI with timing status
-    updateTimingStatus();
-  }
-
-  // Get price at expiry time using candles
-  function getPriceAtExpiry(signal) {
-    if (!signal || !signal.timestamp) return null;
-    
-    const entryTime = signal.timestamp;
-    const expirySeconds = signal.expiry || (signal.minutes || 5) * 60;
-    const expiryTime = entryTime + (expirySeconds * 1000); // Convert seconds to ms
-    const expiryCandleTime = Math.floor(expiryTime / 60000) * 60000; // Round to minute (start of candle)
-    const expiryCandleEndTime = expiryCandleTime + 60000; // End of candle (1 minute later)
-    
-    // Find the candle that contains the expiry time
-    // A candle covers time from t to t+60000 (1 minute)
-    if (!ohlcM1 || ohlcM1.length === 0) return null;
-    
-    // Find candle that contains expiry time
-    // Candle time t means candle covers [t, t+60000)
-    let expiryCandle = null;
-    for (let i = ohlcM1.length - 1; i >= 0; i--) {
-      const candle = ohlcM1[i];
-      // Check if expiry time falls within this candle's time range
-      if (expiryTime >= candle.t && expiryTime < candle.t + 60000) {
-        expiryCandle = candle;
-        break;
-      }
-      // If we've gone past the expiry candle, stop searching
-      if (candle.t < expiryCandleTime) {
-        break;
-      }
-    }
-    
-    // If we found the exact expiry candle, use its close price
-    if (expiryCandle) {
-      return expiryCandle.c; // Close price of expiry candle
-    }
-    
-    // Fallback: find the candle that was active at expiry time
-    // Look for candle with time <= expiryTime < time+60000
-    for (let i = ohlcM1.length - 1; i >= 0; i--) {
-      const candle = ohlcM1[i];
-      if (candle.t <= expiryTime && expiryTime < candle.t + 60000) {
-        return candle.c;
-      }
-      // Stop if we've gone too far back
-      if (candle.t < expiryCandleTime - 60000) {
-        break;
-      }
-    }
-    
-    // Last resort: use the most recent candle's close price
-    // This happens if expiry time is in the future or we don't have that candle yet
-    if (ohlcM1.length > 0) {
-      const lastCandle = ohlcM1[ohlcM1.length - 1];
-      // Only use if we're past expiry time
-      if (Date.now() >= expiryTime) {
-        return lastCandle.c;
-      }
-    }
-    
-    return null;
-  }
-
-  // Automatically verify signal outcome based on price movement at expiry
-  function autoVerifySignal(signal) {
-    if (!signal) {
-      console.warn(`[Pocket Scout Dynamic Time] ⚠️ Cannot auto-verify: missing signal`);
+  // Calculate confidence based on indicator consensus
+  function analyzeIndicators() {
+    if (!warmupComplete || ohlcM1.length < WARMUP_CANDLES) {
       return null;
     }
 
-    const entryPrice = signal.price;
-    const entryTime = signal.timestamp;
-    const expirySeconds = signal.expiry || 300; // Default 5 minutes
-    const expiryTime = entryTime + (expirySeconds * 1000);
-    const now = Date.now();
-    
-    // Get price at expiry time (using candles for accuracy)
-    let expiryPrice = getPriceAtExpiry(signal);
-    
-    // If we can't get expiry price from candles, use current price
-    // But only if we're past expiry time (with small margin)
-    if (!expiryPrice) {
-      if (now >= expiryTime - 10000) { // Within 10 seconds of expiry or past
-        expiryPrice = lastPrice;
-      } else {
-        console.warn(`[Pocket Scout Dynamic Time] ⚠️ Cannot auto-verify: no price data at expiry time`);
-        return null;
-      }
-    }
-    
-    const priceChange = expiryPrice - entryPrice;
-    const priceChangePercent = (priceChange / entryPrice) * 100;
-    
-    // For binary options: WIN if price moved in predicted direction
-    // We use a very small threshold to account for spread/noise
-    // But we need clear directional movement
-    const MIN_MOVEMENT_PERCENT = 0.001; // 0.001% minimum movement (very small threshold)
-    
-    let outcome = null;
-    const direction = priceChange > 0 ? '↑' : priceChange < 0 ? '↓' : '→';
-    
-    if (signal.action === 'BUY') {
-      // BUY wins if expiry price is higher than entry price
-      if (priceChange > 0) {
-        // Price increased - WIN
-        outcome = 'WIN';
-      } else if (priceChange < 0) {
-        // Price decreased - LOSS
-        outcome = 'LOSS';
-      } else {
-        // Price exactly the same - very rare, consider it a LOSS (no movement)
-        outcome = 'LOSS';
-      }
-    } else if (signal.action === 'SELL') {
-      // SELL wins if expiry price is lower than entry price
-      if (priceChange < 0) {
-        // Price decreased - WIN
-        outcome = 'WIN';
-      } else if (priceChange > 0) {
-        // Price increased - LOSS
-        outcome = 'LOSS';
-      } else {
-        // Price exactly the same - very rare, consider it a LOSS (no movement)
-        outcome = 'LOSS';
-      }
+    const TI = window.TechnicalIndicators;
+    const closes = ohlcM1.map(c => c.c);
+    const highs = ohlcM1.map(c => c.h);
+    const lows = ohlcM1.map(c => c.l);
+
+    // Calculate all indicators
+    const rsi = TI.calculateRSI(closes, 14);
+    const macd = TI.calculateMACD(closes, 12, 26, 9);
+    const ema9 = TI.calculateEMA(closes, 9);
+    const ema21 = TI.calculateEMA(closes, 21);
+    const bb = TI.calculateBollingerBands(closes, 20, 2);
+    const adx = TI.calculateADX(highs, lows, closes, 14);
+    const atr = TI.calculateATR(highs, lows, closes, 14);
+
+    if (!rsi || !macd || !ema9 || !ema21 || !bb || !adx || !atr) {
+      return null;
     }
 
-    if (outcome) {
-      const timeSinceExpiry = (now - expiryTime) / 1000;
-      console.log(`[Pocket Scout Dynamic Time] 🔍 Auto-verification: ${signal.action} | Entry: ${entryPrice.toFixed(5)} | Expiry: ${expiryPrice.toFixed(5)} | Change: ${direction}${Math.abs(priceChangePercent).toFixed(4)}% | Time: ${timeSinceExpiry.toFixed(1)}s | Outcome: ${outcome}`);
-      verifySignal(outcome);
-      return outcome;
+    const currentPrice = closes[closes.length - 1];
+    
+    // Vote system: each indicator votes BUY (+1), SELL (-1), or NEUTRAL (0)
+    let votes = 0;
+    let maxVotes = 0;
+    const reasons = [];
+
+    // RSI vote
+    maxVotes++;
+    if (rsi < 30) {
+      votes++;
+      reasons.push(`RSI oversold (${rsi.toFixed(1)})`);
+    } else if (rsi > 70) {
+      votes--;
+      reasons.push(`RSI overbought (${rsi.toFixed(1)})`);
     }
 
-    return null;
+    // MACD vote (histogram direction and value)
+    maxVotes++;
+    if (macd.histogram > 0) {
+      // Check if histogram is growing (compare with previous value)
+      votes++;
+      reasons.push(`MACD bullish (${macd.histogram.toFixed(5)})`);
+    } else if (macd.histogram < 0) {
+      votes--;
+      reasons.push(`MACD bearish (${macd.histogram.toFixed(5)})`);
+    }
+
+    // EMA Crossover vote
+    maxVotes++;
+    if (ema9 > ema21) {
+      votes++;
+      reasons.push('EMA9 > EMA21 (bullish)');
+    } else if (ema9 < ema21) {
+      votes--;
+      reasons.push('EMA9 < EMA21 (bearish)');
+    }
+
+    // Bollinger Bands vote
+    maxVotes++;
+    if (currentPrice <= bb.lower) {
+      votes++;
+      reasons.push('Price at lower BB');
+    } else if (currentPrice >= bb.upper) {
+      votes--;
+      reasons.push('Price at upper BB');
+    }
+
+    // ADX strengthens signal (if trend is strong)
+    let adxBoost = 0;
+    if (adx.adx > 25) {
+      adxBoost = 0.1;
+      reasons.push(`ADX strong trend (${adx.adx.toFixed(1)})`);
+    }
+
+    // Calculate confidence
+    const baseConfidence = (Math.abs(votes) / maxVotes) * 100;
+    const confidence = Math.min(95, Math.round(baseConfidence + (adxBoost * 100)));
+    
+    // Determine direction
+    const action = votes > 0 ? 'BUY' : votes < 0 ? 'SELL' : null;
+    
+    // Calculate duration based on ADX and volatility
+    let duration = 3; // Base: 3 minutes
+    
+    const avgPrice = closes.slice(-20).reduce((a, b) => a + b, 0) / 20;
+    const volatilityRatio = atr / avgPrice;
+    
+    if (adx.adx > 30) {
+      duration = 5; // Strong trend: 5 minutes
+      reasons.push('Duration: 5min (strong trend)');
+    } else if (volatilityRatio > 0.015) {
+      duration = Math.floor(Math.random() * 2) + 1; // High volatility: 1-2 minutes
+      reasons.push(`Duration: ${duration}min (high volatility)`);
+    } else {
+      reasons.push('Duration: 3min (normal)');
+    }
+
+    return {
+      action,
+      confidence,
+      duration,
+      reasons: reasons.slice(0, 5), // Limit to top 5 reasons
+      price: currentPrice,
+      volatility: volatilityRatio,
+      adxStrength: adx.adx
+    };
   }
 
-  // Check localStorage for Auto Trader results
-  function checkAutoTraderResults() {
-    try {
-      const feedData = localStorage.getItem('PS_AT_FEED');
-      if (!feedData) return;
-
-      const parsed = JSON.parse(feedData);
-      if (!parsed.signals || !Array.isArray(parsed.signals)) return;
-
-      // Look for signals with results
-      for (const feedSignal of parsed.signals) {
-        if (feedSignal.result && lastSignal && 
-            feedSignal.timestamp === lastSignal.timestamp) {
-          // Found result for current signal
-          console.log(`[Pocket Scout Dynamic Time] 📥 Auto Trader result received: ${feedSignal.result}`);
-          verifySignal(feedSignal.result);
-          return;
-        }
-      }
-    } catch (e) {
-      // Silently fail - localStorage might not be accessible
-    }
-  }
-
-  // Publish the pending signal
-  function publishPendingSignal() {
-    if (!pendingSignalData) return;
-
-    const series = getSeries();
-    const { closes, highs, lows, opens, candles } = series;
-
-    // Determine best action at publish time
-    let finalSignal = null;
-    let regimeAtPublish = lastRegime;
-
-    if (window.MarketRegimeDetector) {
-      const regimeResult = window.MarketRegimeDetector.updateRegime(ohlcM1);
-      regimeAtPublish = regimeResult.regime || window.MarketRegimeDetector.getCurrentRegime();
-    }
-
-    if (window.RLIntegration && window.RLIntegration.getRecommendedAction) {
-      const recommendation = window.RLIntegration.getRecommendedAction(ohlcM1, regimeAtPublish);
-      const groups = window.IndicatorGroups.getAllGroups();
-      const selectedGroup = groups[recommendation.actionIndex];
-
-      if (selectedGroup && selectedGroup.analyze) {
-        const analysis = selectedGroup.analyze({ closes, highs, lows, opens, candles });
-        if (analysis && analysis.action) {
-          finalSignal = {
-            action: analysis.action,
-            confidence: recommendation.confidence,
-            groupId: recommendation.groupId,
-            groupName: recommendation.groupName,
-            reasons: analysis.reasons || [],
-            qAdvantage: recommendation.qAdvantage || 0
-          };
-        }
-      }
-    }
-
-    // Fallback: scan all groups to find best current action
-    if (!finalSignal) {
-      const groups = window.IndicatorGroups.getAllGroups();
-      for (const group of groups) {
-        if (!group.analyze) continue;
-        const analysis = group.analyze({ closes, highs, lows, opens, candles });
-        if (analysis && analysis.action) {
-           finalSignal = {
-             action: analysis.action,
-             confidence: analysis.confidence || 70,
-             groupId: group.id,
-             groupName: group.name,
-             reasons: analysis.reasons || [],
-             qAdvantage: 0
-           };
-          break;
-        }
-      }
-    }
-
-    if (!finalSignal) {
-      console.warn('[Pocket Scout Dynamic Time] ⚠️ No valid action at publish time; canceling window');
-      signalLocked = false;
-      pendingSignalData = null;
+  // Generate signal (called by cyclic engine every 10 minutes)
+  function generateSignal() {
+    if (!warmupComplete) {
+      console.log(`[Pocket Scout v3.0] ⏸️ Warmup in progress: ${ohlcM1.length}/${WARMUP_CANDLES} candles`);
       return;
     }
 
-    // Bandit weight adjustment to prioritize historically winning groups
-    let banditWeight = 1;
-    if (window.RLIntegration && window.RLIntegration.getBanditWeight) {
-      banditWeight = window.RLIntegration.getBanditWeight(finalSignal.groupId);
-      finalSignal.confidence = Math.max(40, Math.min(95, Math.round(finalSignal.confidence * banditWeight)));
-    }
+    console.log(`[Pocket Scout v3.0] 🔄 Generating signal...`);
 
-    // Soft-gated scoring: never block publishing; gate score adjusts confidence
-    const TI = window.TechnicalIndicators;
-    const adx = TI.calculateADX(highs, lows, closes, 14);
-    const macd = TI.calculateMACD(closes, 12, 26, 9);
-    const rsi = TI.calculateRSI(closes, 14);
-    const stoch = TI.calculateStochastic(highs, lows, closes, 14, 3);
-    const bb = TI.calculateBollingerBands(closes, 20, 2);
-    const atr = TI.calculateATR(highs, lows, closes, 14);
-    const ema12 = TI.calculateEMA(closes, 12);
-    const ema26 = TI.calculateEMA(closes, 26);
-    const ema21 = TI.calculateEMA(closes, 21);
-
-    function passesHardGates(action, softMode = false) {
-      const volLevel = (regimeAtPublish && regimeAtPublish.volatility && regimeAtPublish.volatility.level) || 'MEDIUM';
-      const price = closes[closes.length - 1];
-      const configByVol = {
-        LOW: { atrMin: 0.001, atrMax: 0.028, macdTol: 0.0006, rsiBuyMax: 75, rsiSellMin: 25, stochBuyMax: 90, stochSellMin: 10, emaTol: 0.00008 },
-        MEDIUM: { atrMin: 0.0015, atrMax: 0.03, macdTol: 0.0005, rsiBuyMax: 72, rsiSellMin: 28, stochBuyMax: 88, stochSellMin: 12, emaTol: 0.0001 },
-        HIGH: { atrMin: 0.0015, atrMax: 0.03, macdTol: 0.0004, rsiBuyMax: 70, rsiSellMin: 30, stochBuyMax: 85, stochSellMin: 15, emaTol: 0.00012 }
-      };
-      const cfg = configByVol[volLevel] || configByVol.MEDIUM;
-      const softCfg = {
-        atrMin: cfg.atrMin * 0.6,
-        atrMax: cfg.atrMax * 1.15,
-        macdTol: cfg.macdTol * 1.8,
-        rsiBuyMax: cfg.rsiBuyMax + 4,
-        rsiSellMin: Math.max(20, cfg.rsiSellMin - 4),
-        stochBuyMax: Math.min(95, cfg.stochBuyMax + 5),
-        stochSellMin: Math.max(5, cfg.stochSellMin - 5),
-        emaTol: cfg.emaTol * 1.8
-      };
-      const useCfg = softMode ? softCfg : cfg;
-      const emaDiff = ema12 && ema26 ? ema12 - ema26 : null;
-
-      // Trend alignment (allow neutral when EMAs converge)
-      if (emaDiff !== null) {
-        const isUp = emaDiff >= -useCfg.emaTol;
-        const isDown = emaDiff <= useCfg.emaTol * -1;
-        const isNeutral = Math.abs(emaDiff) < useCfg.emaTol;
-        if (action === 'BUY' && !isUp && !isNeutral) return false;
-        if (action === 'SELL' && !isDown && !isNeutral) return false;
-        if (adx && adx.adx !== null && adx.adx > (softMode ? 35 : 30) && !isNeutral) {
-          const adxUp = adx.plusDI > adx.minusDI;
-          if (action === 'BUY' && !adxUp) return false;
-          if (action === 'SELL' && adxUp) return false;
-        }
-      }
-
-      // Momentum alignment
-      if (macd && macd.histogram !== undefined) {
-        if (action === 'BUY' && macd.histogram < -useCfg.macdTol) return false;
-        if (action === 'SELL' && macd.histogram > useCfg.macdTol) return false;
-      }
-      if (rsi !== null) {
-        if (action === 'BUY' && rsi > useCfg.rsiBuyMax) return false;
-        if (action === 'SELL' && rsi < useCfg.rsiSellMin) return false;
-      }
-      if (stoch && stoch.k !== undefined) {
-        if (action === 'BUY' && stoch.k > useCfg.stochBuyMax) return false;
-        if (action === 'SELL' && stoch.k < useCfg.stochSellMin) return false;
-      }
-
-      // Volatility guard
-      if (atr && closes.length >= 20) {
-        const avgPrice = closes.slice(-20).reduce((a, b) => a + b, 0) / 20;
-        const ratio = avgPrice > 0 ? atr / avgPrice : 0;
-        if (ratio > useCfg.atrMax || ratio < useCfg.atrMin) return false;
-      }
-
-      // Pattern/context alignment: ensure price not against mid-BB/EMA21
-      const lastClose = closes[closes.length - 1];
-      if (bb) {
-        const priceTol = price ? price * (softMode ? 0.001 : 0.0005) : (softMode ? 0.001 : 0.0005);
-        const closeToEMA = ema21 ? Math.abs(bb.middle - ema21) <= priceTol : false;
-        if (closeToEMA) {
-          if (action === 'BUY' && lastClose < Math.min(bb.middle, ema21 || bb.middle)) return false;
-          if (action === 'SELL' && lastClose > Math.max(bb.middle, ema21 || bb.middle)) return false;
-        } else {
-          if (!softMode) {
-            if (action === 'BUY' && lastClose < bb.middle) return false;
-            if (action === 'SELL' && lastClose > bb.middle) return false;
-          }
-        }
-      }
-      if (ema21) {
-        const priceTol = price ? price * (softMode ? 0.001 : 0.0005) : (softMode ? 0.001 : 0.0005);
-        const closeToBB = bb ? Math.abs(ema21 - bb.middle) <= priceTol : false;
-        if (!closeToBB && !softMode) {
-          if (action === 'BUY' && lastClose < ema21) return false;
-          if (action === 'SELL' && lastClose > ema21) return false;
-        }
-      }
-
-      // Regime-aware: avoid counter-trend in strong ADX
-      if (adx && adx.adx !== null && adx.adx > 25) {
-        const isUp = adx.plusDI > adx.minusDI;
-        if (action === 'BUY' && !isUp) return false;
-        if (action === 'SELL' && isUp) return false;
-      }
-
-      return true;
-    }
-
-    const gatePassed = passesHardGates(finalSignal.action, false);
-    const gateSoftPass = passesHardGates(finalSignal.action, true);
-    const gateScore = gatePassed ? 1 : gateSoftPass ? 0.65 : 0.45;
-    gateRejectStreak = gatePassed ? 0 : gateRejectStreak + 1;
-
-    // Adaptive confidence: earned, not smoothed
-    const qAdv = window.RLIntegration && window.RLIntegration.getLastQAdvantage ? window.RLIntegration.getLastQAdvantage() : (window.RLIntegration && window.RLIntegration.lastQAdvantage) || (finalSignal.qAdvantage || 0);
-    let adjustedConfidence = finalSignal.confidence;
-    adjustedConfidence = Math.max(40, Math.min(95, Math.round(adjustedConfidence * (0.6 + 0.4 * gateScore))));
-    if (!gatePassed) {
-      adjustedConfidence = Math.min(adjustedConfidence, 74); // keep sub-75 when alignment is soft
-    }
-    // Elevate only when all alignment + advantage + learned weight agree
-    if (canElevate) {
-      const edgeBoost = Math.min(20, Math.round(qAdv * 25) + Math.round((banditWeight - 1) * 15));
-      adjustedConfidence = Math.max(adjustedConfidence, Math.min(95, 72 + edgeBoost));
-    } else {
-      adjustedConfidence = Math.min(adjustedConfidence, 74);
-    }
-
-    finalSignal.confidence = adjustedConfidence;
-
-    // Update signal with current price and timestamp
-    // IMPORTANT: Store RL state and action for learning (before they get overwritten)
-    const rlState = window.RLIntegration && window.RLIntegration.getLastState ? 
-                    window.RLIntegration.getLastState() : null;
-    const rlAction = window.RLIntegration && window.RLIntegration.getLastAction !== undefined ? 
-                     window.RLIntegration.getLastAction() : null;
+    const analysis = analyzeIndicators();
     
+    if (!analysis || !analysis.action) {
+      console.log(`[Pocket Scout v3.0] ⚠️ No clear signal (neutral or insufficient data)`);
+      updateUI();
+      return;
+    }
+
+    // Only display/publish signals with confidence >= 70%
+    if (analysis.confidence < 70) {
+      console.log(`[Pocket Scout v3.0] ⚠️ Signal confidence too low: ${analysis.confidence}%`);
+      updateUI();
+      return;
+    }
+
     const signal = {
-      ...pendingSignalData,
-      action: finalSignal.action,
-      groupId: finalSignal.groupId,
-      groupName: finalSignal.groupName,
-      confidence: finalSignal.confidence,
-      reasons: finalSignal.reasons,
-      price: lastPrice || pendingSignalData.price,
+      action: analysis.action,
+      confidence: analysis.confidence,
+      duration: analysis.duration,
+      expiry: analysis.duration * 60, // Convert to seconds
+      reasons: analysis.reasons,
+      price: analysis.price || lastPrice,
       timestamp: Date.now(),
-      // Store RL state and action for learning (protected from overwriting)
-      _rlState: rlState ? [...rlState] : null,
-      _rlAction: rlAction
+      volatility: analysis.volatility,
+      adxStrength: analysis.adxStrength
     };
 
     lastSignal = signal;
-    gateRejectStreak = 0;
-    const expiryDisplay = signal.expiry ? `${signal.expiry}s` : `${signal.minutes || 5}min`;
-    console.log(`[Pocket Scout Dynamic Time] ✅ Signal published: ${signal.action} | ${signal.groupName} | Conf: ${signal.confidence}% | Entry: ${signal.price.toFixed(5)} | Expiry: ${expiryDisplay}`);
-    console.log(`[Pocket Scout Dynamic Time] ⏱️ Auto-verification scheduled for ${expiryDisplay} after entry`);
     
-    updateUI([signal]);
-    publishToAutoTrader([signal]);
-    
-    // Clean up timing window
-    if (window.SignalTimingController) {
-      window.SignalTimingController.stopTimingWindow();
+    // Add to history
+    signalHistory.unshift(signal);
+    if (signalHistory.length > MAX_HISTORY) {
+      signalHistory = signalHistory.slice(0, MAX_HISTORY);
     }
-    
-    pendingSignalData = null;
-    // Keep signalLocked = true until outcome is verified
-    
-    // Schedule automatic verification after expiry time
-    // Use expiry in seconds (from signal.expiry) or fallback to minutes
-    const expirySeconds = signal.expiry || (signal.minutes || 5) * 60;
-    const expiryMs = expirySeconds * 1000;
-    const verificationDelay = expiryMs + 15000; // Expiry + 15 seconds for price to settle and candle to close
-    
-    // Clear any existing verification timeout for this signal
-    const signalId = signal.timestamp;
-    if (signalVerificationTimeouts.has(signalId)) {
-      clearTimeout(signalVerificationTimeouts.get(signalId));
-    }
-    
-    // Schedule automatic verification
-    const verificationTimeout = setTimeout(() => {
-      if (lastSignal && lastSignal.timestamp === signalId) {
-        // First try to get result from Auto Trader
-        checkAutoTraderResults();
-        
-        // If still not verified, use price-based auto-verification
-        if (signalLocked && lastSignal && lastSignal.timestamp === signalId) {
-          console.log(`[Pocket Scout Dynamic Time] ⏰ Signal expiry reached (${expirySeconds}s), auto-verifying...`);
-          
-          // Wait a bit more for candle to close, then verify
-          setTimeout(() => {
-            if (signalLocked && lastSignal && lastSignal.timestamp === signalId) {
-              const verified = autoVerifySignal(lastSignal);
-              
-              // If auto-verification didn't work, try again after another delay
-              if (!verified) {
-                console.log(`[Pocket Scout Dynamic Time] ⚠️ Auto-verification failed, retrying in 10s...`);
-                setTimeout(() => {
-                  if (signalLocked && lastSignal && lastSignal.timestamp === signalId) {
-                    const retryVerified = autoVerifySignal(lastSignal);
-                    
-                    // If still not verified, unlock anyway
-                    if (!retryVerified) {
-                      console.log(`[Pocket Scout Dynamic Time] 🔓 Auto-unlocking (verification failed after retry)`);
-                      signalLocked = false;
-                      lastSignal = null;
-                      
-                      // Prepare new signal after unlock
-                      setTimeout(() => {
-                        if (!signalLocked && !pendingSignalData) {
-                          prepareSignalForTiming();
-                        }
-                      }, 2000);
-                    }
-                  }
-                }, 10000); // Additional 10 seconds wait
-              }
-            }
-          }, 5000); // Wait 5 seconds for candle to close
-        }
-      }
-      signalVerificationTimeouts.delete(signalId);
-    }, verificationDelay);
-    
-    signalVerificationTimeouts.set(signalId, verificationTimeout);
-    
-    // Also set up periodic checks for Auto Trader results
-    if (!lastFeedCheck) {
-      lastFeedCheck = setInterval(() => {
-        if (signalLocked && lastSignal) {
-          checkAutoTraderResults();
-        }
-      }, 5000); // Check every 5 seconds
-    }
-  }
 
-  // Cancel pending signal
-  function cancelPendingSignal() {
-    if (window.SignalTimingController) {
-      window.SignalTimingController.stopTimingWindow();
-    }
+    console.log(`[Pocket Scout v3.0] ✅ Signal generated: ${signal.action} | Conf: ${signal.confidence}% | Duration: ${signal.duration}min | Price: ${signal.price.toFixed(5)}`);
     
-    pendingSignalData = null;
-    signalLocked = false;
-    updateUI([]);
-    console.log(`[Pocket Scout Dynamic Time] ❌ Pending signal canceled`);
+    updateUI();
+    
+    // Publish to Auto Trader if confidence >= 75%
+    if (signal.confidence >= 75) {
+      publishToAutoTrader(signal);
+    } else {
+      console.log(`[Pocket Scout v3.0] 📊 Signal displayed only (confidence ${signal.confidence}% < 75%)`);
+    }
   }
 
   // Publish to Auto Trader
-  function publishToAutoTrader(signals) {
-    if (!signals || signals.length === 0) return;
+  function publishToAutoTrader(signal) {
+    const feed = {
+      action: signal.action,
+      confidence: signal.confidence,
+      duration: signal.duration,
+      timestamp: signal.timestamp,
+      entryPrice: signal.price
+    };
 
-    const feed = signals.map(sig => ({
-      model: sig.groupId,
-      action: sig.action,
-      displayConf: sig.confidence,
-      confidence: sig.confidence,
-      minutes: sig.minutes,
-      optimalExpiry: sig.expiry,
-      expirySeconds: sig.expiry,
-      timestamp: sig.timestamp,
-      entryPrice: sig.price
-    }));
-
-    const payload = { signals: feed };
-    localStorage.setItem(FEED_KEY, JSON.stringify(payload));
-    
-    console.log(`[Pocket Scout Dynamic Time] 📤 Published to Auto Trader:`, feed);
+    localStorage.setItem(FEED_KEY, JSON.stringify(feed));
+    console.log(`[Pocket Scout v3.0] 📤 Published to Auto Trader:`, feed);
   }
 
-  // Update status display (price + candles info)
+  // Update status display
   function updateStatusDisplay() {
     if (!UI.status) return;
     
     const progress = Math.min(100, (ohlcM1.length / WARMUP_CANDLES) * 100);
     const warmupStatus = warmupComplete ? '✅ Complete' : '🔥 In Progress';
     const warmupColor = warmupComplete ? '#10b981' : '#f59e0b';
-    const risk = getRiskSummary();
-    const pattern = getPatternSummary();
-    const regimeDirection = lastRegime && lastRegime.trend ? lastRegime.trend.direction : 'NEUTRAL';
-    const riskText = risk ? `${(risk.ratio * 100).toFixed(2)}% (${risk.level})` : 'n/a';
-    const patternText = pattern && pattern.patterns && pattern.patterns.length ? pattern.patterns.join(', ') : 'None';
     
     UI.status.innerHTML = `
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
@@ -856,34 +312,20 @@
             <div style="background:#3b82f6; height:100%; width:${progress}%; transition:width 0.3s;"></div>
           </div>
         ` : ''}
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px; font-size:11px;">
-          <span style="opacity:0.7;">Volatility</span>
-          <span style="font-weight:600; color:#facc15;">${riskText}</span>
-        </div>
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px; font-size:11px;">
-          <span style="opacity:0.7;">Regime</span>
-          <span style="font-weight:600; color:#a5b4fc;">${regimeDirection}</span>
-        </div>
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px; font-size:11px;">
-          <span style="opacity:0.7;">Pattern</span>
-          <span style="font-weight:600; color:#34d399;">${patternText}</span>
-        </div>
       </div>
     `;
   }
 
-  // Update UI
-  function updateUI(signals) {
+  // Update UI with signal and countdown
+  function updateUI() {
     if (!UI.panel) return;
     
-    // Always update status display
     updateStatusDisplay();
 
-    // Update warmup status
     if (!warmupComplete) {
       const progress = Math.min(100, (ohlcM1.length / WARMUP_CANDLES) * 100);
-      if (UI.signals) {
-        UI.signals.innerHTML = `
+      if (UI.signalDisplay) {
+        UI.signalDisplay.innerHTML = `
           <div style="padding:20px; text-align:center;">
             <div style="font-size:16px; margin-bottom:10px;">🔥 Warmup in Progress</div>
             <div style="font-size:14px; color:#60a5fa; margin-bottom:10px;">${ohlcM1.length}/${WARMUP_CANDLES} candles</div>
@@ -897,71 +339,47 @@
       return;
     }
 
-    // Update signal display
-    if (signals.length === 0) {
-      if (UI.signals) {
-        // Check if timing window is active
-        if (window.SignalTimingController && window.SignalTimingController.isActive()) {
-          const elapsed = window.SignalTimingController.getElapsedTime();
-          const remaining = window.SignalTimingController.getRemainingTime();
-          const elapsedSec = Math.floor(elapsed / 1000);
-          const remainingSec = Math.floor(remaining / 1000);
-          const pending = window.SignalTimingController.getPendingSignal();
-          
-          // If the window has run out of time (or nearly), reset to avoid UI hang and immediately restart analysis
-          if (remainingSec <= 1 || elapsedSec >= 299) {
-            window.SignalTimingController.stopTimingWindow();
-            pendingSignalData = null;
-            signalLocked = false;
-            UI.signals.innerHTML = `
-              <div style="padding:20px; text-align:center; opacity:0.7;">
-                <div style="font-size:14px;">🤖 AI Learning</div>
-                <div style="font-size:11px; margin-top:6px;">Timing window reset; re-analyzing...</div>
-              </div>
-            `;
-            setTimeout(() => {
-              if (!signalLocked && !pendingSignalData) {
-                prepareSignalForTiming();
-              }
-            }, 500);
-            return;
-          }
-          
-          if (pending) {
-            const actionColor = pending.action === 'BUY' ? '#10b981' : '#ef4444';
-            UI.signals.innerHTML = `
-              <div style="padding:20px; text-align:center;">
-                <div style="font-size:14px; color:#f59e0b; margin-bottom:8px;">🤖 AI Window Active</div>
-                <div style="font-size:12px; color:${actionColor}; font-weight:600; margin-bottom:8px;">${pending.action} - ${pending.groupName}</div>
-                <div style="font-size:11px; opacity:0.7; margin-bottom:12px;">Analyzing live entry; signals stay live without countdown.</div>
-              </div>
-            `;
-            return;
-          }
-        }
-        
-        UI.signals.innerHTML = `
+    // Display countdown to next signal
+    if (UI.countdown && window.CyclicDecisionEngine) {
+      const remaining = window.CyclicDecisionEngine.getRemainingTime();
+      const minutes = Math.floor(remaining / 60000);
+      const seconds = Math.floor((remaining % 60000) / 1000);
+      
+      UI.countdown.innerHTML = `
+        <div style="text-align:center; padding:12px; background:#1e293b; border-radius:8px; margin-bottom:12px;">
+          <div style="font-size:11px; opacity:0.7; margin-bottom:4px;">Next Signal In:</div>
+          <div style="font-size:24px; font-weight:700; color:#3b82f6; font-family:monospace;">
+            ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}
+          </div>
+        </div>
+      `;
+    }
+
+    // Display current signal
+    if (!lastSignal) {
+      if (UI.signalDisplay) {
+        UI.signalDisplay.innerHTML = `
           <div style="padding:20px; text-align:center; opacity:0.7;">
-            <div style="font-size:14px;">🤖 AI Learning</div>
-            <div style="font-size:11px; margin-top:6px;">Waiting for next timing window...</div>
+            <div style="font-size:14px;">⏳ Waiting for first signal...</div>
+            <div style="font-size:11px; margin-top:6px;">Signal will be generated in 10 minutes</div>
           </div>
         `;
       }
       return;
     }
 
-    const sig = signals[0];
+    const sig = lastSignal;
     const actionColor = sig.action === 'BUY' ? '#10b981' : '#ef4444';
     const bgColor = sig.action === 'BUY' ? '#064e3b' : '#7f1d1d';
 
-    if (UI.signals) {
-      UI.signals.innerHTML = `
+    if (UI.signalDisplay) {
+      UI.signalDisplay.innerHTML = `
         <div style="background:${bgColor}; padding:14px; border-radius:10px; border:2px solid ${actionColor};">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
             <div style="font-size:24px; font-weight:800; color:${actionColor};">${sig.action}</div>
             <div style="text-align:right;">
-              <div style="font-size:20px; font-weight:700; color:#60a5fa;">${sig.minutes} MIN</div>
-              <div style="font-size:10px; opacity:0.7;">Expiry</div>
+              <div style="font-size:20px; font-weight:700; color:#60a5fa;">${sig.duration} MIN</div>
+              <div style="font-size:10px; opacity:0.7;">Entry Duration</div>
             </div>
           </div>
           
@@ -971,29 +389,50 @@
               <div style="font-size:18px; font-weight:700; color:#3b82f6;">${sig.confidence}%</div>
             </div>
             <div style="background:rgba(0,0,0,0.3); padding:8px; border-radius:6px;">
-              <div style="font-size:9px; opacity:0.7; margin-bottom:3px;">Group</div>
-              <div style="font-size:12px; font-weight:600; color:#60a5fa;">${sig.groupName}</div>
+              <div style="font-size:9px; opacity:0.7; margin-bottom:3px;">Entry Price</div>
+              <div style="font-size:13px; font-weight:600; color:#60a5fa; font-family:monospace;">${sig.price.toFixed(5)}</div>
             </div>
           </div>
           
           <div style="font-size:10px; opacity:0.8; margin-bottom:8px; padding:8px; background:rgba(0,0,0,0.2); border-radius:6px;">
-            ${sig.reasons.slice(0, 3).map(r => `<div style="margin-bottom:3px;">✓ ${r}</div>`).join('')}
+            ${sig.reasons.map(r => `<div style="margin-bottom:3px;">✓ ${r}</div>`).join('')}
           </div>
           
           <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
             <div style="flex:1; height:8px; border-radius:6px; background:linear-gradient(90deg, #ef4444 0%, #f59e0b 40%, #22c55e 100%); position:relative; overflow:hidden;">
               <div style="position:absolute; top:0; bottom:0; left:0; width:${sig.confidence}%; background:rgba(15,23,42,0.4);"></div>
             </div>
-            <div style="font-size:10px; opacity:0.8;">Vol: ${sig.risk && sig.risk.ratio ? (sig.risk.ratio * 100).toFixed(2) + '%' : 'n/a'}</div>
           </div>
           
-          <div style="font-size:10px; opacity:0.7; margin-bottom:8px;">
-            Pattern: ${(sig.patterns && sig.patterns.patterns && sig.patterns.patterns.length ? sig.patterns.patterns.join(', ') : 'None')}
+          <div style="font-size:10px; opacity:0.7; display:flex; justify-content:space-between;">
+            <span>Volatility: ${(sig.volatility * 100).toFixed(2)}%</span>
+            <span>ADX: ${sig.adxStrength.toFixed(1)}</span>
           </div>
-          
-          <div style="margin-top:10px; padding:6px 8px; background:rgba(0,0,0,0.25); border-radius:6px; font-size:10px; font-family:monospace;">
-            Entry: ${sig.price.toFixed(5)}
-          </div>
+        </div>
+      `;
+    }
+
+    // Display signal history
+    if (UI.historyDisplay && signalHistory.length > 0) {
+      UI.historyDisplay.innerHTML = `
+        <div style="font-size:11px; font-weight:600; color:#60a5fa; margin-bottom:8px;">📊 HISTORY (Last ${Math.min(5, signalHistory.length)})</div>
+        <div style="max-height:150px; overflow-y:auto;">
+          ${signalHistory.slice(0, 5).map(s => {
+            const time = new Date(s.timestamp).toLocaleTimeString();
+            const color = s.action === 'BUY' ? '#10b981' : '#ef4444';
+            return `
+              <div style="padding:6px; background:#1e293b; border-radius:6px; margin-bottom:6px; font-size:10px;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <span style="color:${color}; font-weight:700;">${s.action}</span>
+                  <span style="opacity:0.7;">${time}</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; margin-top:2px;">
+                  <span style="color:#3b82f6;">Conf: ${s.confidence}%</span>
+                  <span style="opacity:0.7;">${s.duration}min</span>
+                </div>
+              </div>
+            `;
+          }).join('')}
         </div>
       `;
     }
@@ -1065,7 +504,7 @@
   // Inject panel
   function injectPanel() {
     const panel = document.createElement('div');
-    panel.id = 'ps-time-panel';
+    panel.id = 'ps-v3-panel';
     
     panel.style.cssText = `
       position:fixed; top:60px; right:12px; z-index:999999;
@@ -1077,21 +516,26 @@
 
     panel.innerHTML = `
       <div id="ps-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; padding-bottom:12px; border-bottom:2px solid #3b82f6;">
-        <div style="display:flex; align-items:center; gap:8px;">
-          <div style="font-weight:700; font-size:18px; color:#60a5fa;">Pocket Scout Dynamic Time</div>
-          <div style="font-size:10px; background:#ef4444; color:#fff; padding:2px 6px; border-radius:4px; font-weight:600;">v${VERSION}</div>
+        <div>
+          <div style="font-weight:700; font-size:18px; color:#60a5fa;">Pocket Scout v3.0</div>
+          <div style="font-size:9px; opacity:0.6; margin-top:2px;">by Claude Opus</div>
         </div>
+        <div style="font-size:10px; background:#ef4444; color:#fff; padding:2px 6px; border-radius:4px; font-weight:600;">LIVE</div>
       </div>
       
       <div id="ps-status" style="padding:10px; background:#1e293b; border-radius:8px; margin-bottom:12px; font-size:12px; border:1px solid #334155;"></div>
       
+      <div id="ps-countdown"></div>
+      
       <div style="margin-bottom:12px;">
-        <div style="font-size:11px; font-weight:600; color:#60a5fa; margin-bottom:8px;">🎯 SIGNAL</div>
-        <div id="ps-signals"></div>
+        <div style="font-size:11px; font-weight:600; color:#60a5fa; margin-bottom:8px;">🎯 CURRENT SIGNAL</div>
+        <div id="ps-signal"></div>
       </div>
       
+      <div id="ps-history"></div>
+      
       <div style="font-size:9px; opacity:0.5; text-align:center; margin-top:12px; padding-top:12px; border-top:1px solid #334155;">
-        AI Mode: RL Agent | Dynamic Timing: 1-5 min
+        10-Minute Cyclic Signals | Multi-Indicator Analysis
       </div>
     `;
     
@@ -1102,150 +546,29 @@
     
     UI.panel = panel;
     UI.status = document.getElementById('ps-status');
-    UI.signals = document.getElementById('ps-signals');
+    UI.countdown = document.getElementById('ps-countdown');
+    UI.signalDisplay = document.getElementById('ps-signal');
+    UI.historyDisplay = document.getElementById('ps-history');
   }
 
-  // Verify signal outcome (called by Auto Trader or manually)
-  function verifySignal(outcome) {
-    if (!lastSignal) {
-      console.warn(`[Pocket Scout Dynamic Time] ⚠️ Cannot verify: no active signal`);
-      return;
-    }
-    
-    if (!window.RLIntegration) {
-      console.warn(`[Pocket Scout Dynamic Time] ⚠️ Cannot verify: RL Integration not available`);
-      return;
-    }
-    
-    const result = outcome === 'WIN' ? 'WIN' : outcome === 'LOSS' ? 'LOSS' : null;
-    if (!result) {
-      console.warn(`[Pocket Scout Dynamic Time] ⚠️ Invalid outcome: ${outcome}`);
-      return;
-    }
-    
-    const signalToVerify = lastSignal;
-    console.log(`[Pocket Scout Dynamic Time] ✅ Verifying signal: ${signalToVerify.action} | ${signalToVerify.groupName} | Conf: ${signalToVerify.confidence}% | Outcome: ${result}`);
-    
-    // Learn from experience (DQN training)
-    // Use stored RL state and action from signal (protected from overwriting during timing window)
-    if (window.RLIntegration.onSignalVerified) {
-      // If signal has stored RL state/action, use those; otherwise use current (fallback)
-      const learningState = signalToVerify._rlState || null;
-      const learningAction = signalToVerify._rlAction !== null && signalToVerify._rlAction !== undefined ? 
-                            signalToVerify._rlAction : null;
-      
-      if (learningState && learningAction !== null) {
-        // Temporarily restore state/action for learning
-        if (window.RLIntegration.setLearningState) {
-          window.RLIntegration.setLearningState(learningState, learningAction);
-        }
+  // Start countdown timer update
+  function startCountdownTimer() {
+    setInterval(() => {
+      if (warmupComplete) {
+        updateUI();
       }
-      
-      window.RLIntegration.onSignalVerified(
-        result, 
-        signalToVerify.confidence, 
-        ohlcM1, 
-        lastRegime
-      );
-    }
-    
-    const reward = window.RLIntegration.calculateReward(result, signalToVerify.confidence);
-    
-    // Get metrics before saving
-    const metricsBefore = window.RLIntegration.getMetrics ? window.RLIntegration.getMetrics() : null;
-    
-    console.log(`[Pocket Scout Dynamic Time] 📊 Signal verified: ${result} | Reward: ${reward.toFixed(2)} | Learning from experience`);
-    
-    if (metricsBefore) {
-      console.log(`[Pocket Scout Dynamic Time] 📈 Metrics: Win Rate: ${metricsBefore.winRate.toFixed(1)}% | Wins: ${metricsBefore.sessionWins} | Losses: ${metricsBefore.sessionLosses} | Streak: ${metricsBefore.currentStreak}`);
-    }
-    
-    // Save RL state periodically (every 10 experiences)
-    if (window.RLIntegration.saveState && window.RLIntegration.getMetrics) {
-      const metrics = window.RLIntegration.getMetrics();
-      if (metrics.totalExperiences % 10 === 0) {
-        window.RLIntegration.saveState();
-        console.log(`[Pocket Scout Dynamic Time] 💾 RL state saved (${metrics.totalExperiences} experiences)`);
-      }
-    }
-    
-    // Clear auto-unlock timeout if it exists
-    if (signalUnlockTimeout) {
-      clearTimeout(signalUnlockTimeout);
-      signalUnlockTimeout = null;
-    }
-    
-    // Clear verification timeouts
-    if (signalToVerify.timestamp) {
-      const signalId = signalToVerify.timestamp;
-      if (signalVerificationTimeouts.has(signalId)) {
-        clearTimeout(signalVerificationTimeouts.get(signalId));
-        signalVerificationTimeouts.delete(signalId);
-      }
-    }
-    
-    // Unlock signal generation and start new timing window
-    signalLocked = false;
-    lastSignal = null;
-    
-    // Start new timing window after verification
-    console.log(`[Pocket Scout Dynamic Time] 🔄 Starting new timing window after verification`);
-    setTimeout(() => {
-      prepareSignalForTiming();
-    }, 2000); // Small delay to ensure state is clean
-  }
-
-  // Message handler for popup
-  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    if (message.type === 'GET_METRICS') {
-      if (window.RLIntegration && window.RLIntegration.getMetrics) {
-        const metrics = window.RLIntegration.getMetrics();
-        sendResponse({ 
-          metrics,
-          regime: lastRegime,
-          risk: getRiskSummary(),
-          patterns: getPatternSummary(),
-          lastSignal
-        });
-      } else {
-        sendResponse({ metrics: null });
-      }
-      return true;
-    }
-    
-    if (message.type === 'VERIFY_SIGNAL') {
-      verifySignal(message.outcome);
-      sendResponse({ success: true });
-      return true;
-    }
-    
-    return false;
-  });
-
-  // Update timing status in UI
-  function updateTimingStatus() {
-    if (!window.SignalTimingController || !window.SignalTimingController.isActive()) {
-      return;
-    }
-    
-    // Trigger UI update
-    updateUI([]);
+    }, 1000); // Update every second
   }
 
   // Start processing
-  async function start() {
-    console.log(`[Pocket Scout Dynamic Time v${VERSION}] Starting...`);
+  function start() {
+    console.log(`[Pocket Scout v3.0] Starting...`);
     
     // Wait for dependencies
     const requiredDeps = [
       'CircularBuffer',
       'TechnicalIndicators',
-      'MarketRegimeDetector',
-      'IndicatorGroups',
-      'DQNNetwork',
-      'ExperienceReplay',
-      'RLIntegration',
-      'SignalTimingController'
+      'CyclicDecisionEngine'
     ];
     
     const checkDeps = setInterval(() => {
@@ -1254,30 +577,12 @@
       if (missing.length === 0) {
         clearInterval(checkDeps);
         
-        // Initialize RL Integration
-        if (window.RLIntegration) {
-          window.RLIntegration.initialize().then(() => {
-            console.log('[Pocket Scout Dynamic Time] RL Integration initialized');
-          }).catch(err => {
-            console.error('[Pocket Scout Dynamic Time] RL Integration failed:', err);
-          });
-        }
+        console.log(`[Pocket Scout v3.0] All dependencies loaded`);
         
         // Inject panel
         injectPanel();
         
-        // Set up timing controller callback
-        if (window.SignalTimingController) {
-          window.SignalTimingController.setTimingCallback((event, signal) => {
-            if (event === 'EXPIRED') {
-              monitorTimingWindow(); // Will handle expiration logic
-            }
-          });
-        }
-        
-        console.log(`[Pocket Scout Dynamic Time] All dependencies loaded`);
-        
-        // Start tick processing
+        // Start tick processing (collect price every second)
         setInterval(() => {
           const price = readPriceFromDom();
           if (price) {
@@ -1285,28 +590,10 @@
           }
         }, 1000);
         
-        // Start timing window monitoring
-        // More frequent checks when timing window is active (every 5s), less frequent otherwise (every 30s)
-        timingMonitorInterval = setInterval(() => {
-          if (!warmupComplete) return;
-          
-          if (pendingSignalData) {
-            // Monitor active timing window more frequently
-            monitorTimingWindow();
-          } else if (!signalLocked) {
-            // No active signal, prepare new one (less frequent check)
-            prepareSignalForTiming();
-          }
-        }, 5000); // Check every 5 seconds for responsiveness
-        
-        // Initial signal preparation after warmup (with delay)
-        setTimeout(() => {
-          if (warmupComplete && !signalLocked && !pendingSignalData) {
-            prepareSignalForTiming();
-          }
-        }, 5000);
+        // Start countdown timer
+        startCountdownTimer();
       } else {
-        console.log(`[Pocket Scout Dynamic Time] Waiting for: ${missing.join(', ')}`);
+        console.log(`[Pocket Scout v3.0] Waiting for: ${missing.join(', ')}`);
       }
     }, 200);
   }
@@ -1315,4 +602,4 @@
 
 })();
 
-console.log('[Pocket Scout Dynamic Time] Content script loaded');
+console.log('[Pocket Scout v3.0] Content script loaded - by Claude Opus');

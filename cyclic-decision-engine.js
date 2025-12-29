@@ -1,12 +1,12 @@
 /**
- * Pocket Scout Time - Cyclic Decision Engine
- * Forces signal generation every 330 seconds (5:30 min)
+ * Pocket Scout v3.0 - Cyclic Decision Engine
+ * Generates signals every 10 minutes (600 seconds)
  */
 
 window.CyclicDecisionEngine = (function() {
   'use strict';
 
-  const CYCLE_INTERVAL_MS = 330 * 1000; // 5 minutes 30 seconds
+  const CYCLE_INTERVAL_MS = 600 * 1000; // 10 minutes (600 seconds)
   let intervalId = null;
   let signalGenerationCallback = null;
   let lastCycleStartTime = 0;
@@ -25,7 +25,7 @@ window.CyclicDecisionEngine = (function() {
     lastCycleStartTime = Date.now();
 
     // Immediately trigger first signal
-    console.log('[CyclicDecisionEngine] Initializing - first signal in 5:30');
+    console.log('[CyclicDecisionEngine] Initializing - first signal in 10:00 minutes');
     signalGenerationCallback();
 
     // Set up recurring interval
@@ -55,13 +55,20 @@ window.CyclicDecisionEngine = (function() {
     return lastCycleStartTime;
   }
 
+  function getRemainingTime() {
+    const now = Date.now();
+    const elapsed = now - lastCycleStartTime;
+    return Math.max(0, CYCLE_INTERVAL_MS - elapsed);
+  }
+
   return {
     initialize,
     stop,
     getLastCycleStartTime,
+    getRemainingTime,
     CYCLE_INTERVAL_MS
   };
 })();
 
-console.log('[Pocket Scout Time] Cyclic Decision Engine loaded');
+console.log('[Pocket Scout v3.0] Cyclic Decision Engine loaded - 10 minute intervals');
 
