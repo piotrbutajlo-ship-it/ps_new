@@ -1,0 +1,38 @@
+{
+  "manifest_version": 3,
+  "name": "Pocket Scout Dynamic Time",
+  "version": "2.1.0",
+  "description": "Dynamic Timing Windows (1-5 min) for Optimal Signal Entry with RL Agent",
+  "permissions": [
+    "storage",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "https://pocketoption.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://pocketoption.com/*"],
+      "js": [
+        "lib/circular-buffer.js",
+        "lib/technical-indicators.js",
+        "lib/market-regime-detector.js",
+        "lib/indicator-groups.js",
+        "lib/dqn-network.js",
+        "lib/experience-replay.js",
+        "lib/rl-integration.js",
+        "lib/signal-timing-controller.js",
+        "content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Pocket Scout Dynamic Time"
+  }
+}
+
