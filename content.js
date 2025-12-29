@@ -19,7 +19,7 @@
   let warmupComplete = false;
   let lastSignal = null;
   let signalHistory = [];
-  const MAX_HISTORY = 50; // Track more history for WR calculation
+  const MAX_HISTORY = 100; // Track more history for learning
   
   // Win Rate tracking
   let totalSignals = 0;
@@ -28,6 +28,15 @@
   
   // Configurable signal interval (minutes)
   let signalIntervalMinutes = 5; // Default 5 minutes
+  
+  // Advanced Learning System - Track what works
+  let learningData = {
+    indicatorWeights: { rsi: 1.5, macd: 2.0, ema: 1.5, bb: 1.0, stoch: 1.0 },
+    successfulPatterns: [],
+    failedPatterns: [],
+    bestTimeOfDay: {},
+    bestConfidenceRange: {}
+  };
 
   // UI Elements
   let UI = {};
@@ -49,6 +58,11 @@
         winningSignals = stats.wins || 0;
         losingSignals = stats.losses || 0;
       }
+      
+      const savedLearning = localStorage.getItem('PS_LEARNING_DATA');
+      if (savedLearning) {
+        learningData = JSON.parse(savedLearning);
+      }
     } catch (e) {
       console.warn('[Pocket Scout v3.0] Error loading settings:', e);
     }
@@ -63,6 +77,7 @@
         wins: winningSignals,
         losses: losingSignals
       }));
+      localStorage.setItem('PS_LEARNING_DATA', JSON.stringify(learningData));
     } catch (e) {
       console.warn('[Pocket Scout v3.0] Error saving settings:', e);
     }
@@ -180,14 +195,14 @@
 
     const currentPrice = closes[closes.length - 1];
     
-    // Enhanced vote system with more flexible thresholds
+    // Enhanced vote system with learned weights
     let buyVotes = 0;
     let sellVotes = 0;
     let totalWeight = 0;
     const reasons = [];
 
-    // RSI vote (weight: 1.5) - More flexible thresholds
-    const rsiWeight = 1.5;
+    // RSI vote - Use learned weight
+    const rsiWeight = learningData.indicatorWeights.rsi;
     totalWeight += rsiWeight;
     if (rsi < 40) {
       const strength = (40 - rsi) / 40; // 0-1 range
@@ -199,8 +214,8 @@
       reasons.push(`RSI overbought (${rsi.toFixed(1)})`);
     }
 
-    // MACD vote (weight: 2.0) - Strong indicator
-    const macdWeight = 2.0;
+    // MACD vote - Use learned weight
+    const macdWeight = learningData.indicatorWeights.macd;
     totalWeight += macdWeight;
     const macdStrength = Math.min(1, Math.abs(macd.histogram) * 1000);
     if (macd.histogram > 0 && macd.macd > macd.signal) {
@@ -211,8 +226,8 @@
       reasons.push(`MACD bearish (${macd.histogram.toFixed(5)})`);
     }
 
-    // EMA Crossover vote (weight: 1.5)
-    const emaWeight = 1.5;
+    // EMA Crossover vote - Use learned weight
+    const emaWeight = learningData.indicatorWeights.ema;
     totalWeight += emaWeight;
     const emaDiff = Math.abs(ema9 - ema21) / ema21;
     const emaStrength = Math.min(1, emaDiff * 100);
@@ -224,8 +239,8 @@
       reasons.push('EMA9 < EMA21 (bearish)');
     }
 
-    // Bollinger Bands vote (weight: 1.0)
-    const bbWeight = 1.0;
+    // Bollinger Bands vote - Use learned weight
+    const bbWeight = learningData.indicatorWeights.bb;
     totalWeight += bbWeight;
     const bbRange = bb.upper - bb.lower;
     const bbPosition = (currentPrice - bb.lower) / bbRange; // 0-1 where price is in BB
@@ -237,9 +252,9 @@
       reasons.push('Price at upper BB');
     }
     
-    // Stochastic vote (weight: 1.0) - Additional momentum confirmation
+    // Stochastic vote - Use learned weight
     if (stoch) {
-      const stochWeight = 1.0;
+      const stochWeight = learningData.indicatorWeights.stoch;
       totalWeight += stochWeight;
       if (stoch.k < 30 && stoch.d < 30) {
         const strength = (30 - stoch.k) / 30;
@@ -400,12 +415,9 @@
     
     updateUI();
     
-    // Publish to Auto Trader if confidence >= 65% (lowered threshold)
-    if (signal.confidence >= 65) {
-      publishToAutoTrader(signal);
-    } else {
-      console.log(`[Pocket Scout v3.0] 📊 Signal displayed only (confidence ${signal.confidence}% < 65%)`);
-    }
+    // ALWAYS publish to Auto Trader - no threshold filtering
+    // Auto Trader will decide based on its own threshold settings
+    publishToAutoTrader(signal);
   }
 
   // Publish to Auto Trader
@@ -469,6 +481,9 @@
       losingSignals++;
     }
     
+    // LEARNING: Analyze what made this signal win or lose
+    learnFromSignalResult(signal, isWin);
+    
     saveSettings();
     
     const priceChange = ((currentPrice - entryPrice) / entryPrice * 100).toFixed(3);
@@ -478,6 +493,158 @@
     
     // Update UI to reflect new WR
     updateUI();
+  }
+  
+  // LEARNING SYSTEM: Analyze signal patterns and adjust strategy
+  function learnFromSignalResult(signal, isWin) {
+    // Extract pattern data
+    const pattern = {
+      action: signal.action,
+      confidence: signal.confidence,
+      rsi: signal.rsi,
+      macdHistogram: signal.macdHistogram,
+      adxStrength: signal.adxStrength,
+      volatility: signal.volatility,
+      duration: signal.duration,
+      timeOfDay: new Date(signal.timestamp).getHours(),
+      isFallback: signal.isFallback,
+      result: isWin ? 'WIN' : 'LOSS'
+    };
+    
+    // Store pattern in appropriate list
+    if (isWin) {
+      learningData.successfulPatterns.push(pattern);
+      // Keep only last 100 successful patterns
+      if (learningData.successfulPatterns.length > 100) {
+        learningData.successfulPatterns.shift();
+      }
+    } else {
+      learningData.failedPatterns.push(pattern);
+      // Keep only last 100 failed patterns
+      if (learningData.failedPatterns.length > 100) {
+        learningData.failedPatterns.shift();
+      }
+    }
+    
+    // Track time of day performance
+    const hour = pattern.timeOfDay;
+    if (!learningData.bestTimeOfDay[hour]) {
+      learningData.bestTimeOfDay[hour] = { wins: 0, losses: 0 };
+    }
+    if (isWin) {
+      learningData.bestTimeOfDay[hour].wins++;
+    } else {
+      learningData.bestTimeOfDay[hour].losses++;
+    }
+    
+    // Track confidence range performance
+    const confRange = Math.floor(pattern.confidence / 10) * 10; // Round to nearest 10
+    if (!learningData.bestConfidenceRange[confRange]) {
+      learningData.bestConfidenceRange[confRange] = { wins: 0, losses: 0 };
+    }
+    if (isWin) {
+      learningData.bestConfidenceRange[confRange].wins++;
+    } else {
+      learningData.bestConfidenceRange[confRange].losses++;
+    }
+    
+    // Analyze and adjust indicator weights (every 20 signals)
+    if ((winningSignals + losingSignals) % 20 === 0 && winningSignals + losingSignals >= 20) {
+      adjustIndicatorWeights();
+    }
+    
+    console.log(`[Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: ${learningData.successfulPatterns.length} | Failed: ${learningData.failedPatterns.length}`);
+  }
+  
+  // Adjust indicator weights based on learning
+  function adjustIndicatorWeights() {
+    console.log('[Pocket Scout v3.0] 🧠 Analyzing patterns and adjusting indicator weights...');
+    
+    const successful = learningData.successfulPatterns;
+    const failed = learningData.failedPatterns;
+    
+    if (successful.length < 10 || failed.length < 10) {
+      console.log('[Pocket Scout v3.0] 🎓 Not enough data to adjust weights yet');
+      return;
+    }
+    
+    // Analyze RSI effectiveness
+    const successRSI = successful.filter(p => !p.isFallback && ((p.action === 'BUY' && p.rsi < 45) || (p.action === 'SELL' && p.rsi > 55)));
+    const failRSI = failed.filter(p => !p.isFallback && ((p.action === 'BUY' && p.rsi < 45) || (p.action === 'SELL' && p.rsi > 55)));
+    const rsiWinRate = successRSI.length / (successRSI.length + failRSI.length) || 0.5;
+    
+    // Analyze MACD effectiveness
+    const successMACD = successful.filter(p => !p.isFallback && Math.abs(p.macdHistogram) > 0.0001);
+    const failMACD = failed.filter(p => !p.isFallback && Math.abs(p.macdHistogram) > 0.0001);
+    const macdWinRate = successMACD.length / (successMACD.length + failMACD.length) || 0.5;
+    
+    // Analyze ADX effectiveness (trend strength)
+    const successADX = successful.filter(p => p.adxStrength > 25);
+    const failADX = failed.filter(p => p.adxStrength > 25);
+    const adxWinRate = successADX.length / (successADX.length + failADX.length) || 0.5;
+    
+    // Adjust weights based on performance (subtle adjustments)
+    const oldWeights = { ...learningData.indicatorWeights };
+    
+    // RSI adjustment
+    if (rsiWinRate > 0.65) {
+      learningData.indicatorWeights.rsi = Math.min(2.5, learningData.indicatorWeights.rsi * 1.1);
+    } else if (rsiWinRate < 0.45) {
+      learningData.indicatorWeights.rsi = Math.max(0.5, learningData.indicatorWeights.rsi * 0.9);
+    }
+    
+    // MACD adjustment
+    if (macdWinRate > 0.65) {
+      learningData.indicatorWeights.macd = Math.min(3.0, learningData.indicatorWeights.macd * 1.1);
+    } else if (macdWinRate < 0.45) {
+      learningData.indicatorWeights.macd = Math.max(1.0, learningData.indicatorWeights.macd * 0.9);
+    }
+    
+    // EMA adjustment (based on ADX effectiveness as proxy for trend following)
+    if (adxWinRate > 0.65) {
+      learningData.indicatorWeights.ema = Math.min(2.5, learningData.indicatorWeights.ema * 1.1);
+    } else if (adxWinRate < 0.45) {
+      learningData.indicatorWeights.ema = Math.max(0.5, learningData.indicatorWeights.ema * 0.9);
+    }
+    
+    console.log(`[Pocket Scout v3.0] 📊 Weight adjustments:
+      RSI: ${oldWeights.rsi.toFixed(2)} → ${learningData.indicatorWeights.rsi.toFixed(2)} (WR: ${(rsiWinRate * 100).toFixed(1)}%)
+      MACD: ${oldWeights.macd.toFixed(2)} → ${learningData.indicatorWeights.macd.toFixed(2)} (WR: ${(macdWinRate * 100).toFixed(1)}%)
+      EMA: ${oldWeights.ema.toFixed(2)} → ${learningData.indicatorWeights.ema.toFixed(2)} (Trend WR: ${(adxWinRate * 100).toFixed(1)}%)`);
+    
+    // Find best time of day
+    let bestHour = -1;
+    let bestHourWR = 0;
+    for (const [hour, stats] of Object.entries(learningData.bestTimeOfDay)) {
+      const total = stats.wins + stats.losses;
+      if (total >= 5) {
+        const wr = stats.wins / total;
+        if (wr > bestHourWR) {
+          bestHourWR = wr;
+          bestHour = parseInt(hour);
+        }
+      }
+    }
+    if (bestHour >= 0) {
+      console.log(`[Pocket Scout v3.0] ⏰ Best trading hour: ${bestHour}:00 (WR: ${(bestHourWR * 100).toFixed(1)}%)`);
+    }
+    
+    // Find best confidence range
+    let bestRange = -1;
+    let bestRangeWR = 0;
+    for (const [range, stats] of Object.entries(learningData.bestConfidenceRange)) {
+      const total = stats.wins + stats.losses;
+      if (total >= 5) {
+        const wr = stats.wins / total;
+        if (wr > bestRangeWR) {
+          bestRangeWR = wr;
+          bestRange = parseInt(range);
+        }
+      }
+    }
+    if (bestRange >= 0) {
+      console.log(`[Pocket Scout v3.0] 📈 Best confidence range: ${bestRange}-${bestRange + 10}% (WR: ${(bestRangeWR * 100).toFixed(1)}%)`);
+    }
   }
 
   // Update status display
