@@ -378,7 +378,9 @@
       rsi: rsi,
       macdHistogram: macdHistogram,
       wr: calculateWinRate(),
-      isFallback: !analysis || !analysis.action || analysis.confidence < 50
+      isFallback: !analysis || !analysis.action || analysis.confidence < 50,
+      entryPrice: lastPrice,
+      result: null // Will be set after duration expires
     };
 
     lastSignal = signal;
@@ -392,6 +394,9 @@
     }
 
     console.log(`[Pocket Scout v3.0] ✅ Signal ALWAYS shown: ${signal.action} | Conf: ${signal.confidence}% | WR: ${signal.wr.toFixed(1)}% | Duration: ${signal.duration}min | Price: ${signal.price.toFixed(5)}`);
+    
+    // Schedule automatic result check after duration expires
+    scheduleSignalResultCheck(signal);
     
     updateUI();
     
@@ -417,6 +422,62 @@
 
     localStorage.setItem(FEED_KEY, JSON.stringify(feed));
     console.log(`[Pocket Scout v3.0] 📤 Published to Auto Trader:`, feed);
+  }
+  
+  // Schedule automatic result check after signal duration expires
+  function scheduleSignalResultCheck(signal) {
+    const durationMs = signal.duration * 60 * 1000; // Convert minutes to milliseconds
+    
+    setTimeout(() => {
+      checkSignalResult(signal);
+    }, durationMs);
+    
+    console.log(`[Pocket Scout v3.0] ⏰ Scheduled result check for ${signal.action} signal in ${signal.duration} minutes`);
+  }
+  
+  // Check signal result after duration expires
+  function checkSignalResult(signal) {
+    if (!signal || signal.result !== null) {
+      return; // Already checked or invalid signal
+    }
+    
+    const currentPrice = lastPrice;
+    const entryPrice = signal.entryPrice;
+    
+    if (!currentPrice || !entryPrice) {
+      console.log(`[Pocket Scout v3.0] ⚠️ Cannot check signal result - missing price data`);
+      return;
+    }
+    
+    let isWin = false;
+    
+    if (signal.action === 'BUY') {
+      // BUY wins if price went up
+      isWin = currentPrice > entryPrice;
+    } else if (signal.action === 'SELL') {
+      // SELL wins if price went down
+      isWin = currentPrice < entryPrice;
+    }
+    
+    // Update signal result
+    signal.result = isWin ? 'WIN' : 'LOSS';
+    
+    // Update statistics
+    if (isWin) {
+      winningSignals++;
+    } else {
+      losingSignals++;
+    }
+    
+    saveSettings();
+    
+    const priceChange = ((currentPrice - entryPrice) / entryPrice * 100).toFixed(3);
+    const newWR = calculateWinRate();
+    
+    console.log(`[Pocket Scout v3.0] 🎯 Signal result: ${signal.result} | ${signal.action} @ ${entryPrice.toFixed(5)} → ${currentPrice.toFixed(5)} (${priceChange > 0 ? '+' : ''}${priceChange}%) | WR: ${newWR.toFixed(1)}%`);
+    
+    // Update UI to reflect new WR
+    updateUI();
   }
 
   // Update status display
@@ -569,10 +630,18 @@
           ${signalHistory.slice(0, 5).map(s => {
             const time = new Date(s.timestamp).toLocaleTimeString();
             const color = s.action === 'BUY' ? '#10b981' : '#ef4444';
+            const resultBadge = s.result ? 
+              (s.result === 'WIN' ? 
+                '<span style="background:#10b981; color:#fff; padding:1px 4px; border-radius:3px; font-size:8px; margin-left:4px;">WIN</span>' : 
+                '<span style="background:#ef4444; color:#fff; padding:1px 4px; border-radius:3px; font-size:8px; margin-left:4px;">LOSS</span>') : 
+              '<span style="background:#64748b; color:#fff; padding:1px 4px; border-radius:3px; font-size:8px; margin-left:4px;">PENDING</span>';
             return `
               <div style="padding:6px; background:#1e293b; border-radius:6px; margin-bottom:6px; font-size:10px;">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                  <span style="color:${color}; font-weight:700;">${s.action}</span>
+                  <div>
+                    <span style="color:${color}; font-weight:700;">${s.action}</span>
+                    ${resultBadge}
+                  </div>
                   <span style="opacity:0.7;">${time}</span>
                 </div>
                 <div style="display:flex; justify-content:space-between; margin-top:2px;">
