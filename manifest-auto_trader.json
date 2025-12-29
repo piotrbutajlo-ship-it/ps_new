@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "Auto Trader v2.8.1 (PS Adaptive)",
+  "version": "2.8.1",
+  "description": "Automated trading companion for Pocket Scout Adaptive v18.0.17 - Auto-promoted signals support, timestamp freshness check, RW detection from DOM, configurable cooldown",
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "*://*.pocketoption.com/*",
+    "*://*.po.trade/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.pocketoption.com/*",
+        "*://*.po.trade/*"
+      ],
+      "js": ["content-auto_trader.js"],
+      "run_at": "document_end",
+      "all_frames": false
+    }
+  ],
+  "icons": {
+    "48": "icon-48.png",
+    "128": "icon-128.png"
+  }
+}
