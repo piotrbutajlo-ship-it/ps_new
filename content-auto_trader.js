@@ -87,6 +87,9 @@
         if (parsed.bestSignal) signals.unshift(parsed.bestSignal); // ensure best goes first
       } else if (parsed && parsed.bestSignal) {
         signals = [parsed.bestSignal];
+      } else if (parsed && parsed.action && Number.isFinite(parsed.confidence)) {
+        // ✅ Pocket Scout v3.0: Single signal object (no wrapper)
+        signals = [parsed];
       }
       
       // Debug: Log feed contents periodically

@@ -611,7 +611,7 @@
 
   // Publish to Auto Trader
   function publishToAutoTrader(signal) {
-    const feed = {
+    const signalData = {
       action: signal.action,
       confidence: signal.confidence,
       duration: signal.duration,
@@ -621,8 +621,13 @@
       expiry: signal.expiry
     };
 
+    // Wrap signal in bestSignal format for Auto Trader compatibility
+    const feed = {
+      bestSignal: signalData
+    };
+
     localStorage.setItem(FEED_KEY, JSON.stringify(feed));
-    console.log(`[Pocket Scout v3.0] 📤 Published to Auto Trader:`, feed);
+    console.log(`[Pocket Scout v3.0] 📤 Published to Auto Trader:`, signalData);
   }
   
   // Schedule automatic result check after signal duration expires
