@@ -29,12 +29,11 @@
   // Configurable signal interval (minutes)
   let signalIntervalMinutes = 5; // Default 5 minutes
   
-  // Advanced Learning System - Track what works
+  // Advanced Learning System - Track what works (removed time-of-day tracking per user request)
   let learningData = {
     indicatorWeights: { rsi: 1.5, macd: 2.0, ema: 1.5, bb: 1.0, stoch: 1.0 },
     successfulPatterns: [],
     failedPatterns: [],
-    bestTimeOfDay: {},
     bestConfidenceRange: {}
   };
   
@@ -466,14 +465,31 @@
     const finalBuyConfidence = Math.min(95, Math.round(buyConfidence + mtfBoost + regimeBoost));
     const finalSellConfidence = Math.min(95, Math.round(sellConfidence + mtfBoost + regimeBoost));
     
-    if (buyVotes > sellVotes && finalBuyConfidence >= 50) {
+    // Apply BUY bias (+5% to BUY signals based on learning data showing BUY > SELL)
+    const buyBias = 5;
+    const adjustedBuyConfidence = Math.min(95, finalBuyConfidence + buyBias);
+    
+    // Apply MACD contrarian boost (+5% when direction contradicts MACD)
+    let macdContrarian = 0;
+    if (macd.histogram < 0 && buyVotes > sellVotes) {
+      macdContrarian = 5; // BUY when MACD bearish = contrarian WIN pattern
+      reasons.push('MACD contrarian: BUY on bearish (+5%)');
+    } else if (macd.histogram > 0 && sellVotes > buyVotes) {
+      macdContrarian = 5; // SELL when MACD bullish = contrarian pattern
+      reasons.push('MACD contrarian: SELL on bullish (+5%)');
+    }
+    
+    const finalAdjustedBuyConfidence = Math.min(95, adjustedBuyConfidence + macdContrarian);
+    const finalAdjustedSellConfidence = Math.min(95, finalSellConfidence + macdContrarian);
+    
+    if (buyVotes > sellVotes && finalAdjustedBuyConfidence >= 40) {
       action = 'BUY';
-      confidence = finalBuyConfidence;
-      console.log(`[Pocket Scout v3.0] 💰 Signal: BUY | Base: ${Math.round(buyConfidence)}% | MTF: ${mtfBoost > 0 ? '+' : ''}${mtfBoost}% | Regime: ${regimeBoost > 0 ? '+' : ''}${regimeBoost}% | Final: ${confidence}%`);
-    } else if (sellVotes > buyVotes && finalSellConfidence >= 50) {
+      confidence = finalAdjustedBuyConfidence;
+      console.log(`[Pocket Scout v3.0] 💰 Signal: BUY | Base: ${Math.round(buyConfidence)}% | MTF: ${mtfBoost > 0 ? '+' : ''}${mtfBoost}% | Regime: ${regimeBoost > 0 ? '+' : ''}${regimeBoost}% | Bias: +${buyBias}% | Contrarian: +${macdContrarian}% | Final: ${confidence}%`);
+    } else if (sellVotes > buyVotes && finalAdjustedSellConfidence >= 40) {
       action = 'SELL';
-      confidence = finalSellConfidence;
-      console.log(`[Pocket Scout v3.0] 💰 Signal: SELL | Base: ${Math.round(sellConfidence)}% | MTF: ${mtfBoost > 0 ? '+' : ''}${mtfBoost}% | Regime: ${regimeBoost > 0 ? '+' : ''}${regimeBoost}% | Final: ${confidence}%`);
+      confidence = finalAdjustedSellConfidence;
+      console.log(`[Pocket Scout v3.0] 💰 Signal: SELL | Base: ${Math.round(sellConfidence)}% | MTF: ${mtfBoost > 0 ? '+' : ''}${mtfBoost}% | Regime: ${regimeBoost > 0 ? '+' : ''}${regimeBoost}% | Contrarian: +${macdContrarian}% | Final: ${confidence}%`);
     }
     
     // Calculate duration based on ADX and volatility
@@ -521,7 +537,7 @@
     // ALWAYS generate a signal - even if confidence is low or neutral
     let action, confidence, reasons, duration, volatility, adxStrength, rsi, macdHistogram;
     
-    if (analysis && analysis.action && analysis.confidence >= 50) {
+    if (analysis && analysis.action && analysis.confidence >= 40) {
       // Use analyzed signal
       action = analysis.action;
       confidence = analysis.confidence;
@@ -582,7 +598,7 @@
       rsi: rsi,
       macdHistogram: macdHistogram,
       wr: calculateWinRate(),
-      isFallback: !analysis || !analysis.action || analysis.confidence < 50,
+      isFallback: !analysis || !analysis.action || analysis.confidence < 40,
       entryPrice: lastPrice,
       result: null // Will be set after duration expires
     };
@@ -691,7 +707,7 @@
   
   // LEARNING SYSTEM: Analyze signal patterns and adjust strategy
   function learnFromSignalResult(signal, isWin) {
-    // Extract pattern data
+    // Extract pattern data (removed timeOfDay per user request)
     const pattern = {
       action: signal.action,
       confidence: signal.confidence,
@@ -700,7 +716,6 @@
       adxStrength: signal.adxStrength,
       volatility: signal.volatility,
       duration: signal.duration,
-      timeOfDay: new Date(signal.timestamp).getHours(),
       isFallback: signal.isFallback,
       result: isWin ? 'WIN' : 'LOSS'
     };
@@ -720,17 +735,6 @@
       }
     }
     
-    // Track time of day performance
-    const hour = pattern.timeOfDay;
-    if (!learningData.bestTimeOfDay[hour]) {
-      learningData.bestTimeOfDay[hour] = { wins: 0, losses: 0 };
-    }
-    if (isWin) {
-      learningData.bestTimeOfDay[hour].wins++;
-    } else {
-      learningData.bestTimeOfDay[hour].losses++;
-    }
-    
     // Track confidence range performance
     const confRange = Math.floor(pattern.confidence / 10) * 10; // Round to nearest 10
     if (!learningData.bestConfidenceRange[confRange]) {
@@ -742,8 +746,8 @@
       learningData.bestConfidenceRange[confRange].losses++;
     }
     
-    // Analyze and adjust indicator weights (every 20 signals)
-    if ((winningSignals + losingSignals) % 20 === 0 && winningSignals + losingSignals >= 20) {
+    // Analyze and adjust indicator weights (every 30 signals - increased from 20)
+    if ((winningSignals + losingSignals) % 30 === 0 && winningSignals + losingSignals >= 30) {
       adjustIndicatorWeights();
     }
     
@@ -1059,22 +1063,7 @@
         .slice(0, 3);
     }
     
-    // Best trading hours
-    let bestHour = '--';
-    let bestHourWR = 0;
-    if (Object.keys(learningData.bestTimeOfDay).length > 0) {
-      const hours = Object.entries(learningData.bestTimeOfDay)
-        .map(([hour, stats]) => ({
-          hour,
-          wr: stats.wins && stats.wins + stats.losses > 0 ? (stats.wins / (stats.wins + stats.losses) * 100).toFixed(1) : 0
-        }))
-        .sort((a, b) => b.wr - a.wr);
-      
-      if (hours.length > 0) {
-        bestHour = hours[0].hour + ':00';
-        bestHourWR = hours[0].wr;
-      }
-    }
+    // Remove Best Hour tracking per user request (market too volatile for time patterns)
     
     analyticsContent.innerHTML = `
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:6px;">
@@ -1097,15 +1086,9 @@
           </div>
         </div>
       ` : ''}
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
-        <div>
-          <div style="opacity:0.7; margin-bottom:2px;">Best Hour:</div>
-          <div style="font-weight:700; color:#f59e0b;">${bestHour} ${bestHourWR > 0 ? `(${bestHourWR}%)` : ''}</div>
-        </div>
-        <div>
-          <div style="opacity:0.7; margin-bottom:2px;">Patterns:</div>
-          <div style="font-weight:700; color:#10b981;">${learningData.successfulPatterns.length + learningData.failedPatterns.length}</div>
-        </div>
+      <div style="margin-top:6px;">
+        <div style="opacity:0.7; margin-bottom:2px;">Patterns Analyzed:</div>
+        <div style="font-weight:700; color:#10b981;">${learningData.successfulPatterns.length + learningData.failedPatterns.length}</div>
       </div>
     `;
   }
