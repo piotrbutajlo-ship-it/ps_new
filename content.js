@@ -720,19 +720,11 @@
       result: isWin ? 'WIN' : 'LOSS'
     };
     
-    // Store pattern in appropriate list
+    // Store pattern in appropriate list (no limit - removed 100 pattern cap)
     if (isWin) {
       learningData.successfulPatterns.push(pattern);
-      // Keep only last 100 successful patterns
-      if (learningData.successfulPatterns.length > 100) {
-        learningData.successfulPatterns.shift();
-      }
     } else {
       learningData.failedPatterns.push(pattern);
-      // Keep only last 100 failed patterns
-      if (learningData.failedPatterns.length > 100) {
-        learningData.failedPatterns.shift();
-      }
     }
     
     // Track confidence range performance
@@ -809,23 +801,6 @@
       RSI: ${oldWeights.rsi.toFixed(2)} → ${learningData.indicatorWeights.rsi.toFixed(2)} (WR: ${(rsiWinRate * 100).toFixed(1)}%)
       MACD: ${oldWeights.macd.toFixed(2)} → ${learningData.indicatorWeights.macd.toFixed(2)} (WR: ${(macdWinRate * 100).toFixed(1)}%)
       EMA: ${oldWeights.ema.toFixed(2)} → ${learningData.indicatorWeights.ema.toFixed(2)} (Trend WR: ${(adxWinRate * 100).toFixed(1)}%)`);
-    
-    // Find best time of day
-    let bestHour = -1;
-    let bestHourWR = 0;
-    for (const [hour, stats] of Object.entries(learningData.bestTimeOfDay)) {
-      const total = stats.wins + stats.losses;
-      if (total >= 5) {
-        const wr = stats.wins / total;
-        if (wr > bestHourWR) {
-          bestHourWR = wr;
-          bestHour = parseInt(hour);
-        }
-      }
-    }
-    if (bestHour >= 0) {
-      console.log(`[Pocket Scout v3.0] ⏰ Best trading hour: ${bestHour}:00 (WR: ${(bestHourWR * 100).toFixed(1)}%)`);
-    }
     
     // Find best confidence range
     let bestRange = -1;
