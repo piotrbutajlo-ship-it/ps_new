@@ -1,0 +1,1015 @@
+demo-quick-high-low/:1 Access to XMLHttpRequest at 'https://k.clarity.ms/collect' from origin 'https://pocketoption.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+k.clarity.ms/collect:1  Failed to load resource: net::ERR_FAILED
+demo-quick-high-low/:1 Access to XMLHttpRequest at 'https://k.clarity.ms/collect' from origin 'https://pocketoption.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+k.clarity.ms/collect:1  Failed to load resource: net::ERR_FAILED
+demo-quick-high-low/:1 Access to XMLHttpRequest at 'https://k.clarity.ms/collect' from origin 'https://pocketoption.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+k.clarity.ms/collect:1  Failed to load resource: net::ERR_FAILED
+k.clarity.ms/collect:1  Failed to load resource: the server responded with a status of 400 (Bad Request)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 23s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 25s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 26s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@55% WR:52.6%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 28s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 29s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 31s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 32s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 34s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 35s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 37s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@55% WR:52.6%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 38s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 40s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 41s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 43s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 44s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 46s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@55% WR:52.6%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 47s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 49s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 50s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 52s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 53s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 55s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 56s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@55% WR:52.6%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 58s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 59s > 15s)
+ [CyclicDecisionEngine] Cycle triggered (61.0s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:BUY M5:NEUTRAL M15:- (TF conflict)
+ [Pocket Scout v3.0] ⚡ Fallback signal generated: SELL @ 59% (trend-based)
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: SELL | Conf: 59% | WR: 52.5% | Duration: 3min | Price: 1.16492
+ [Pocket Scout v3.0] ⏰ Scheduled result check for SELL signal in 3 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@59% WR:52.5%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 15s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@59% WR:52.5%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 17s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 18s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 20s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 21s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 23s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 24s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 26s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@59% WR:52.5%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 27s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 29s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 30s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 32s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 33s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 35s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 36s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@59% WR:52.5%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 38s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 39s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 41s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 42s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 44s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 45s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@59% WR:52.5%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 47s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 48s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 50s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 51s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 53s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 54s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 56s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@59% WR:52.5%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 57s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 59s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 60s > 15s)
+ [CyclicDecisionEngine] Cycle triggered (61.0s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:BUY M5:NEUTRAL M15:- (TF conflict)
+ [Pocket Scout v3.0] ⚡ Fallback signal generated: SELL @ 55% (trend-based)
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: SELL | Conf: 55% | WR: 52.4% | Duration: 3min | Price: 1.16470
+ [Pocket Scout v3.0] ⏰ Scheduled result check for SELL signal in 3 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@55% WR:52.4%
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@55% WR:52.4%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 16s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 17s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 19s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 20s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 22s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 23s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 25s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@55% WR:52.4%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 26s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 28s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 29s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 31s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 32s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 34s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 35s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@55% WR:52.4%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 37s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 38s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 40s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 41s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 43s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 44s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@55% WR:52.4%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 46s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 47s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 49s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 50s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 52s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 53s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 55s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@55% WR:52.4%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 56s > 15s)
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 100 | Failed: 100
+ [Pocket Scout v3.0] 🎯 Signal result: LOSS | BUY @ 1.16493 → 1.16491 (-0.002%) | WR: 52.4%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 58s > 15s)
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 100 | Failed: 100
+ [Pocket Scout v3.0] 🎯 Signal result: LOSS | SELL @ 1.16491 → 1.16491 (0.000%) | WR: 52.4%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 59s > 15s)
+ [CyclicDecisionEngine] Cycle triggered (60.0s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:BUY M5:NEUTRAL M15:- (TF conflict)
+ [Pocket Scout v3.0] ⚡ Fallback signal generated: SELL @ 51% (trend-based)
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: SELL | Conf: 51% | WR: 52.4% | Duration: 3min | Price: 1.16493
+ [Pocket Scout v3.0] ⏰ Scheduled result check for SELL signal in 3 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@51% WR:52.4%
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@51% WR:52.4%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 16s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 17s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 19s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 20s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 22s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 23s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 25s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@51% WR:52.4%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 26s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 28s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 29s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 31s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 32s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 34s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 35s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@51% WR:52.4%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 37s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 38s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 40s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 41s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 43s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 44s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@51% WR:52.4%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 46s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 47s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 49s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 50s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 52s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 53s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 55s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@51% WR:52.4%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 56s > 15s)
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 100 | Failed: 100
+ [Pocket Scout v3.0] 🎯 Signal result: WIN | BUY @ 1.16482 → 1.16522 (+0.034%) | WR: 52.4%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 58s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 59s > 15s)
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 100 | Failed: 100
+ [Pocket Scout v3.0] 🎯 Signal result: LOSS | SELL @ 1.16492 → 1.16518 (+0.022%) | WR: 52.4%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 61s > 15s)
+ [CyclicDecisionEngine] Cycle triggered (61.0s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: RANGING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:BUY M5:NEUTRAL M15:- (TF conflict)
+ [Pocket Scout v3.0] ⚡ Fallback signal generated: SELL @ 61% (trend-based)
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: SELL | Conf: 61% | WR: 52.4% | Duration: 3min | Price: 1.16516
+ [Pocket Scout v3.0] ⏰ Scheduled result check for SELL signal in 3 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [AutoTrader] ✅ Valid candidate [PS v3.0]: SELL @ 61% | WR:52.4% (3min, age: 1s)
+ [AutoTrader] 🎯 Executing STANDARD: SELL 3min @61% (EUR/USD OTC)
+ [AT] ✅ SELL 3min @61%
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 100 | Failed: 100
+ [Pocket Scout v3.0] 🎯 Signal result: LOSS | SELL @ 1.16470 → 1.16474 (+0.003%) | WR: 52.4%
+ [CyclicDecisionEngine] Cycle triggered (60.0s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: RANGING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:BUY M5:NEUTRAL M15:- (TF conflict)
+ [Pocket Scout v3.0] ⚡ Fallback signal generated: SELL @ 58% (trend-based)
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: SELL | Conf: 58% | WR: 52.4% | Duration: 3min | Price: 1.16476
+ [Pocket Scout v3.0] ⏰ Scheduled result check for SELL signal in 3 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@58% WR:52.4%
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@58% WR:52.4%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 16s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 17s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 19s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 20s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 22s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 23s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@58% WR:52.4%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 25s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 26s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 28s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 29s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 31s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 32s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 34s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@58% WR:52.4%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 35s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 37s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 38s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 40s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 41s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 43s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@58% WR:52.4%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 44s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 46s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 47s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 49s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 50s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 52s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 53s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@58% WR:52.4%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 55s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 56s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 58s > 15s)
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 100 | Failed: 100
+ [Pocket Scout v3.0] 🎯 Signal result: WIN | SELL @ 1.16493 → 1.16451 (-0.036%) | WR: 52.4%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 59s > 15s)
+ [CyclicDecisionEngine] Cycle triggered (61.0s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: RANGING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:BUY M5:NEUTRAL M15:- (TF conflict)
+ [Pocket Scout v3.0] ⚡ Fallback signal generated: SELL @ 54% (trend-based)
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: SELL | Conf: 54% | WR: 52.4% | Duration: 3min | Price: 1.16452
+ [Pocket Scout v3.0] ⏰ Scheduled result check for SELL signal in 3 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@54% WR:52.4%
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@54% WR:52.4%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 16s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 18s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 19s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 21s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 22s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@54% WR:52.4%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 24s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 25s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 27s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 28s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 30s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 31s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 33s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@54% WR:52.4%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 34s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 36s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 37s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 39s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 40s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 42s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@54% WR:52.4%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 43s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 45s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 46s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 48s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 49s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 51s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 52s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@54% WR:52.4%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 54s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 55s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 57s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 58s > 15s)
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 100 | Failed: 100
+ [Pocket Scout v3.0] 🎯 Signal result: WIN | SELL @ 1.16516 → 1.16379 (-0.118%) | WR: 52.5%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 60s > 15s)
+ [CyclicDecisionEngine] Cycle triggered (61.0s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:BUY M5:NEUTRAL M15:- (TF conflict)
+ [Pocket Scout v3.0] 💰 Signal: BUY | Base: 61% | MTF: -5% | Regime: +15% | Final: 71%
+ [Pocket Scout v3.0] 📊 Using indicator analysis: BUY @ 71%
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: BUY | Conf: 71% | WR: 52.5% | Duration: 5min | Price: 1.16384
+ [Pocket Scout v3.0] ⏰ Scheduled result check for BUY signal in 5 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [AutoTrader] ✅ Valid candidate [PS v3.0]: BUY @ 71% | WR:52.5% (5min, age: 0s)
+ [AutoTrader] 🎯 Executing STANDARD: BUY 5min @71% (EUR/USD OTC)
+ [AT] ✅ BUY 5min @71%
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 100 | Failed: 100
+ [Pocket Scout v3.0] 🎯 Signal result: WIN | SELL @ 1.16476 → 1.16412 (-0.055%) | WR: 52.6%
+ [CyclicDecisionEngine] Cycle triggered (61.0s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:BUY M5:SELL M15:- (TF conflict)
+ [Pocket Scout v3.0] ⚡ Fallback signal generated: SELL @ 63% (trend-based)
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: SELL | Conf: 63% | WR: 52.6% | Duration: 3min | Price: 1.16417
+ [Pocket Scout v3.0] ⏰ Scheduled result check for SELL signal in 3 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [AutoTrader] ✅ Valid candidate [PS v3.0]: SELL @ 63% | WR:52.6% (3min, age: 1s)
+ [AutoTrader] 🎯 Executing STANDARD: SELL 3min @63% (EUR/USD OTC)
+ [AT] ✅ SELL 3min @63%
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 100 | Failed: 100
+ [Pocket Scout v3.0] 🎯 Signal result: WIN | SELL @ 1.16452 → 1.16434 (-0.015%) | WR: 52.6%
+ [CyclicDecisionEngine] Cycle triggered (60.0s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:SELL M5:SELL M15:- (Partial agreement)
+ [Pocket Scout v3.0] ⚡ Fallback signal generated: SELL @ 63% (trend-based)
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: SELL | Conf: 63% | WR: 52.6% | Duration: 3min | Price: 1.16440
+ [Pocket Scout v3.0] ⏰ Scheduled result check for SELL signal in 3 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@63% WR:52.6%
+ [AutoTrader] ✅ Valid candidate [PS v3.0]: SELL @ 63% | WR:52.6% (3min, age: 3s)
+ [AutoTrader] 🎯 Executing STANDARD: SELL 3min @63% (EUR/USD OTC)
+ [AT] ✅ SELL 3min @63%
+ [CyclicDecisionEngine] Cycle triggered (60.0s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:SELL M5:SELL M15:- (Partial agreement)
+ [Pocket Scout v3.0] ⚡ Fallback signal generated: SELL @ 64% (trend-based)
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: SELL | Conf: 64% | WR: 52.5% | Duration: 3min | Price: 1.16456
+ [Pocket Scout v3.0] ⏰ Scheduled result check for SELL signal in 3 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [AutoTrader] ✅ Valid candidate [PS v3.0]: SELL @ 64% | WR:52.5% (3min, age: 4s)
+ [AutoTrader] 🎯 Executing STANDARD: SELL 3min @64% (EUR/USD OTC)
+ [AT] ✅ SELL 3min @64%
+ [CyclicDecisionEngine] Cycle triggered (60.0s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: RANGING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:SELL M5:SELL M15:- (Partial agreement)
+ [Pocket Scout v3.0] ⚡ Fallback signal generated: SELL @ 63% (trend-based)
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: SELL | Conf: 63% | WR: 52.5% | Duration: 3min | Price: 1.16475
+ [Pocket Scout v3.0] ⏰ Scheduled result check for SELL signal in 3 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [Pocket Scout v3.0] 🧠 Analyzing patterns and adjusting indicator weights...
+ [Pocket Scout v3.0] 📊 Weight adjustments:
+      RSI: 0.50 → 0.50 (WR: 54.5%)
+      MACD: 1.00 → 1.00 (WR: 52.9%)
+      EMA: 0.50 → 0.50 (Trend WR: 56.7%)
+ [Pocket Scout v3.0] ⏰ Best trading hour: 2:00 (WR: 62.7%)
+ [Pocket Scout v3.0] 📈 Best confidence range: 80-90% (WR: 66.7%)
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 100 | Failed: 100
+ [Pocket Scout v3.0] 🎯 Signal result: LOSS | SELL @ 1.16417 → 1.16475 (+0.050%) | WR: 52.4%
+ [AutoTrader] ✅ Valid candidate [PS v3.0]: SELL @ 63% | WR:52.5% (3min, age: 6s)
+ [AutoTrader] 🎯 Executing STANDARD: SELL 3min @63% (EUR/USD OTC)
+ [AT] ✅ SELL 3min @63%
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 100 | Failed: 100
+ [Pocket Scout v3.0] 🎯 Signal result: WIN | BUY @ 1.16384 → 1.16473 (+0.076%) | WR: 52.5%
+ [CyclicDecisionEngine] Cycle triggered (60.0s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: RANGING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:BUY M5:SELL M15:- (TF conflict)
+ [Pocket Scout v3.0] ⚡ Fallback signal generated: SELL @ 60% (trend-based)
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: SELL | Conf: 60% | WR: 52.5% | Duration: 3min | Price: 1.16473
+ [Pocket Scout v3.0] ⏰ Scheduled result check for SELL signal in 3 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 100 | Failed: 100
+ [Pocket Scout v3.0] 🎯 Signal result: LOSS | SELL @ 1.16440 → 1.16473 (+0.028%) | WR: 52.5%
+ [AutoTrader] ✅ Valid candidate [PS v3.0]: SELL @ 60% | WR:52.5% (3min, age: 7s)
+ [AutoTrader] 🎯 Executing STANDARD: SELL 3min @60% (EUR/USD OTC)
+ [AT] ✅ SELL 3min @60%
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 100 | Failed: 100
+ [Pocket Scout v3.0] 🎯 Signal result: LOSS | SELL @ 1.16456 → 1.16465 (+0.008%) | WR: 52.5%
+ [CyclicDecisionEngine] Cycle triggered (61.0s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: RANGING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:BUY M5:SELL M15:- (TF conflict)
+ [Pocket Scout v3.0] ⚡ Fallback signal generated: SELL @ 50% (trend-based)
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: SELL | Conf: 50% | WR: 52.5% | Duration: 3min | Price: 1.16471
+ [Pocket Scout v3.0] ⏰ Scheduled result check for SELL signal in 3 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@50% WR:52.5%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 16s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 18s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 19s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@50% WR:52.5%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 21s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 22s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 24s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 25s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 27s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 28s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 30s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@50% WR:52.5%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 32s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 33s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 34s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 36s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 37s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 39s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@50% WR:52.5%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 40s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 42s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 43s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 45s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 46s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 48s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 49s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@50% WR:52.5%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 51s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 52s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 54s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 55s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 57s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 58s > 15s)
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 100 | Failed: 100
+ [Pocket Scout v3.0] 🎯 Signal result: LOSS | SELL @ 1.16475 → 1.16479 (+0.003%) | WR: 52.4%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 60s > 15s)
+ [CyclicDecisionEngine] Cycle triggered (61.0s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: RANGING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:BUY M5:SELL M15:- (TF conflict)
+ [Pocket Scout v3.0] ⚡ Fallback signal generated: SELL @ 63% (trend-based)
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: SELL | Conf: 63% | WR: 52.4% | Duration: 3min | Price: 1.16473
+ [Pocket Scout v3.0] ⏰ Scheduled result check for SELL signal in 3 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@63% WR:52.4%
+ [AutoTrader] ✅ Valid candidate [PS v3.0]: SELL @ 63% | WR:52.4% (3min, age: 0s)
+ [AutoTrader] 🎯 Executing STANDARD: SELL 3min @63% (EUR/USD OTC)
+ [AT] ✅ SELL 3min @63%
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 100 | Failed: 100
+ [Pocket Scout v3.0] 🎯 Signal result: WIN | SELL @ 1.16473 → 1.16434 (-0.033%) | WR: 52.5%
+ [CyclicDecisionEngine] Cycle triggered (61.0s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:BUY M5:SELL M15:- (TF conflict)
+ [Pocket Scout v3.0] ⚡ Fallback signal generated: SELL @ 63% (trend-based)
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: SELL | Conf: 63% | WR: 52.5% | Duration: 3min | Price: 1.16421
+ [Pocket Scout v3.0] ⏰ Scheduled result check for SELL signal in 3 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [AutoTrader] ✅ Valid candidate [PS v3.0]: SELL @ 63% | WR:52.5% (3min, age: 1s)
+ [AutoTrader] 🎯 Executing STANDARD: SELL 3min @63% (EUR/USD OTC)
+ [AT] ✅ SELL 3min @63%
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 100 | Failed: 100
+ [Pocket Scout v3.0] 🎯 Signal result: WIN | SELL @ 1.16471 → 1.16431 (-0.034%) | WR: 52.5%
+ [CyclicDecisionEngine] Cycle triggered (61.0s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:SELL M5:SELL M15:- (Partial agreement)
+ [Pocket Scout v3.0] ⚡ Fallback signal generated: SELL @ 61% (trend-based)
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: SELL | Conf: 61% | WR: 52.5% | Duration: 3min | Price: 1.16429
+ [Pocket Scout v3.0] ⏰ Scheduled result check for SELL signal in 3 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [AutoTrader] ✅ Valid candidate [PS v3.0]: SELL @ 61% | WR:52.5% (3min, age: 2s)
+ [AutoTrader] 🎯 Executing STANDARD: SELL 3min @61% (EUR/USD OTC)
+ [AT] ✅ SELL 3min @61%
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 100 | Failed: 100
+ [Pocket Scout v3.0] 🎯 Signal result: WIN | SELL @ 1.16473 → 1.16436 (-0.032%) | WR: 52.6%
+ [CyclicDecisionEngine] Cycle triggered (60.5s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:BUY M5:SELL M15:- (TF conflict)
+ [Pocket Scout v3.0] ⚡ Fallback signal generated: SELL @ 60% (trend-based)
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: SELL | Conf: 60% | WR: 52.6% | Duration: 3min | Price: 1.16435
+ [Pocket Scout v3.0] ⏰ Scheduled result check for SELL signal in 3 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [AutoTrader] ✅ Valid candidate [PS v3.0]: SELL @ 60% | WR:52.6% (3min, age: 2s)
+ [AutoTrader] 🎯 Executing STANDARD: SELL 3min @60% (EUR/USD OTC)
+ [AT] ✅ SELL 3min @60%
+ [CyclicDecisionEngine] Cycle triggered (61.0s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:BUY M5:SELL M15:- (TF conflict)
+ [Pocket Scout v3.0] ⚡ Fallback signal generated: SELL @ 54% (trend-based)
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: SELL | Conf: 54% | WR: 52.5% | Duration: 3min | Price: 1.16439
+ [Pocket Scout v3.0] ⏰ Scheduled result check for SELL signal in 3 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 100 | Failed: 100
+ [Pocket Scout v3.0] 🎯 Signal result: LOSS | SELL @ 1.16421 → 1.16439 (+0.015%) | WR: 52.5%
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@54% WR:52.5%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 27s > 15s)
+ [CyclicDecisionEngine] Cycle triggered (63.4s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:BUY M5:SELL M15:- (TF conflict)
+ [Pocket Scout v3.0] ⚡ Fallback signal generated: SELL @ 61% (trend-based)
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: SELL | Conf: 61% | WR: 52.5% | Duration: 3min | Price: 1.16414
+ [Pocket Scout v3.0] ⏰ Scheduled result check for SELL signal in 3 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [AutoTrader] ✅ Valid candidate [PS v3.0]: SELL @ 61% | WR:52.5% (3min, age: 0s)
+ [AutoTrader] 🎯 Executing STANDARD: SELL 3min @61% (EUR/USD OTC)
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 100 | Failed: 100
+ [Pocket Scout v3.0] 🎯 Signal result: WIN | SELL @ 1.16429 → 1.16414 (-0.013%) | WR: 52.5%
+ [AT] ✅ SELL 3min @61%
+ APP: [-] wss://demo-api-eu.po.market
+ [CyclicDecisionEngine] Cycle triggered (83.6s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:SELL M5:SELL M15:- (Partial agreement)
+ [Pocket Scout v3.0] ⚡ Fallback signal generated: SELL @ 56% (trend-based)
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: SELL | Conf: 56% | WR: 52.5% | Duration: 3min | Price: 1.16414
+ [Pocket Scout v3.0] ⏰ Scheduled result check for SELL signal in 3 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@56% WR:52.5%
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 100 | Failed: 100
+ [Pocket Scout v3.0] 🎯 Signal result: WIN | SELL @ 1.16435 → 1.16414 (-0.018%) | WR: 52.6%
+ APP: try connected
+ APP: Connecting
+ [AutoTrader] ⏸️ Signal too old: signal (age: 16s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 16s > 15s)
+ APP: [+] wss://demo-api-eu.po.market
+ APP: Success auth
+ [AutoTrader] ⏸️ Signal too old: signal (age: 18s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@56% WR:52.5%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 20s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 21s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 22s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 24s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 25s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 27s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 28s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@56% WR:52.5%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 30s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 31s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 33s > 15s)
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 100 | Failed: 100
+ [Pocket Scout v3.0] 🎯 Signal result: WIN | SELL @ 1.16439 → 1.16359 (-0.069%) | WR: 52.7%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 35s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 36s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 38s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@56% WR:52.5%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 39s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 41s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 42s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 44s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 45s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 47s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 48s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@56% WR:52.5%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 49s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 52s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 53s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 54s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 56s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 57s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 58s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@56% WR:52.5%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 60s > 15s)
+ [CyclicDecisionEngine] Cycle triggered (60.5s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:BUY M5:SELL M15:- (TF conflict)
+ [Pocket Scout v3.0] 💰 Signal: BUY | Base: 57% | MTF: -5% | Regime: +15% | Final: 67%
+ [Pocket Scout v3.0] 📊 Using indicator analysis: BUY @ 67%
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: BUY | Conf: 67% | WR: 52.7% | Duration: 5min | Price: 1.16355
+ [Pocket Scout v3.0] ⏰ Scheduled result check for BUY signal in 5 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [AutoTrader] ✅ Valid candidate [PS v3.0]: BUY @ 67% | WR:52.7% (5min, age: 1s)
+ [AutoTrader] 🎯 Executing STANDARD: BUY 5min @67% (EUR/USD OTC)
+ [AT] ✅ BUY 5min @67%
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 100 | Failed: 100
+ [Pocket Scout v3.0] 🎯 Signal result: WIN | SELL @ 1.16414 → 1.16358 (-0.048%) | WR: 52.8%
+ [CyclicDecisionEngine] Cycle triggered (60.0s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:BUY M5:SELL M15:- (TF conflict)
+ [Pocket Scout v3.0] 💰 Signal: BUY | Base: 55% | MTF: -5% | Regime: +15% | Final: 65%
+ [Pocket Scout v3.0] 📊 Using indicator analysis: BUY @ 65%
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: BUY | Conf: 65% | WR: 52.8% | Duration: 5min | Price: 1.16345
+ [Pocket Scout v3.0] ⏰ Scheduled result check for BUY signal in 5 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [AutoTrader] ✅ Valid candidate [PS v3.0]: BUY @ 65% | WR:52.8% (5min, age: 2s)
+ [AutoTrader] 🎯 Executing STANDARD: BUY 5min @65% (EUR/USD OTC)
+ [AT] ✅ BUY 5min @65%
+ APP: [-] wss://demo-api-eu.po.market
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 100 | Failed: 100
+ [Pocket Scout v3.0] 🎯 Signal result: WIN | SELL @ 1.16414 → 1.16371 (-0.037%) | WR: 52.8%
+ [CyclicDecisionEngine] Cycle triggered (60.5s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:BUY M5:SELL M15:- (TF conflict)
+ [Pocket Scout v3.0] ⚡ Fallback signal generated: SELL @ 53% (trend-based)
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: SELL | Conf: 53% | WR: 52.8% | Duration: 3min | Price: 1.16371
+ [Pocket Scout v3.0] ⏰ Scheduled result check for SELL signal in 3 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@53% WR:52.8%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 59s > 15s)
+ [CyclicDecisionEngine] Cycle triggered (119.0s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:BUY M5:SELL M15:- (TF conflict)
+ [Pocket Scout v3.0] ⚡ Fallback signal generated: SELL @ 54% (trend-based)
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: SELL | Conf: 54% | WR: 52.8% | Duration: 3min | Price: 1.16371
+ [Pocket Scout v3.0] ⏰ Scheduled result check for SELL signal in 3 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@54% WR:52.8%
+ APP: try connected
+ APP: Connecting
+ [AutoTrader] ⏸️ Signal too old: signal (age: 44s > 15s)
+ APP: [+] wss://demo-api-eu.po.market
+ APP: Success auth
+ [AutoTrader] ⏸️ Signal too old: signal (age: 45s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 47s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 48s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@54% WR:52.8%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 49s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 51s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 52s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 54s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 55s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 57s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 58s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@54% WR:52.8%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 60s > 15s)
+ [CyclicDecisionEngine] Cycle triggered (60.5s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:BUY M5:SELL M15:- (TF conflict)
+ [Pocket Scout v3.0] 💰 Signal: BUY | Base: 67% | MTF: -5% | Regime: +15% | Final: 77%
+ [Pocket Scout v3.0] 📊 Using indicator analysis: BUY @ 77%
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: BUY | Conf: 77% | WR: 52.7% | Duration: 5min | Price: 1.16329
+ [Pocket Scout v3.0] ⏰ Scheduled result check for BUY signal in 5 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 100 | Failed: 100
+ [Pocket Scout v3.0] 🎯 Signal result: LOSS | BUY @ 1.16355 → 1.16329 (-0.022%) | WR: 52.6%
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 100 | Failed: 100
+ [Pocket Scout v3.0] 🎯 Signal result: WIN | SELL @ 1.16371 → 1.16329 (-0.036%) | WR: 52.8%
+ [AutoTrader] ✅ Valid candidate [PS v3.0]: BUY @ 77% | WR:52.7% (5min, age: 1s)
+ [AutoTrader] 🎯 Executing STANDARD: BUY 5min @77% (EUR/USD OTC)
+ [AT] ✅ BUY 5min @77%
+ [CyclicDecisionEngine] Cycle triggered (60.0s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:BUY M5:SELL M15:- (TF conflict)
+ [Pocket Scout v3.0] 💰 Signal: BUY | Base: 40% | MTF: -5% | Regime: +15% | Final: 50%
+ [Pocket Scout v3.0] 📊 Using indicator analysis: BUY @ 50%
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: BUY | Conf: 50% | WR: 52.8% | Duration: 5min | Price: 1.16342
+ [Pocket Scout v3.0] ⏰ Scheduled result check for BUY signal in 5 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 100 | Failed: 100
+ [Pocket Scout v3.0] 🎯 Signal result: LOSS | BUY @ 1.16345 → 1.16342 (-0.003%) | WR: 52.7%
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - BUY@50% WR:52.8%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 16s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 17s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - BUY@50% WR:52.8%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 19s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 20s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 22s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 23s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 25s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 26s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 28s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - BUY@50% WR:52.8%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 29s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 31s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 32s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 34s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 35s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 37s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - BUY@50% WR:52.8%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 38s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 40s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 41s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 43s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 44s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 46s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 47s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - BUY@50% WR:52.8%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 49s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 50s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 52s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 53s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 55s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 56s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 58s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - BUY@50% WR:52.8%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 59s > 15s)
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 100 | Failed: 100
+ [Pocket Scout v3.0] 🎯 Signal result: WIN | SELL @ 1.16371 → 1.16323 (-0.041%) | WR: 52.8%
+ [CyclicDecisionEngine] Cycle triggered (61.0s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:BUY M5:SELL M15:- (TF conflict)
+ [Pocket Scout v3.0] 💰 Signal: BUY | Base: 49% | MTF: -5% | Regime: +15% | Final: 59%
+ [Pocket Scout v3.0] 📊 Using indicator analysis: BUY @ 59%
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: BUY | Conf: 59% | WR: 52.8% | Duration: 5min | Price: 1.16326
+ [Pocket Scout v3.0] ⏰ Scheduled result check for BUY signal in 5 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - BUY@59% WR:52.8%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 15s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 16s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - BUY@59% WR:52.8%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 18s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 19s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 21s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 22s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 24s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 25s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 27s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - BUY@59% WR:52.8%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 28s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 30s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 31s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 33s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 34s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 36s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - BUY@59% WR:52.8%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 37s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 39s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 40s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 42s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 43s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 45s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 46s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - BUY@59% WR:52.8%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 48s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 49s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 51s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 52s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 54s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 55s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 57s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - BUY@59% WR:52.8%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 58s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 60s > 15s)
+ [CyclicDecisionEngine] Cycle triggered (61.0s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:BUY M5:SELL M15:- (TF conflict)
+ [Pocket Scout v3.0] 💰 Signal: BUY | Base: 61% | MTF: -5% | Regime: +15% | Final: 71%
+ [Pocket Scout v3.0] 📊 Using indicator analysis: BUY @ 71%
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: BUY | Conf: 71% | WR: 52.7% | Duration: 5min | Price: 1.16305
+ [Pocket Scout v3.0] ⏰ Scheduled result check for BUY signal in 5 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [AutoTrader] ✅ Valid candidate [PS v3.0]: BUY @ 71% | WR:52.7% (5min, age: 1s)
+ [AutoTrader] 🎯 Executing STANDARD: BUY 5min @71% (EUR/USD OTC)
+ [AT] ✅ BUY 5min @71%
+ [CyclicDecisionEngine] Cycle triggered (61.0s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:BUY M5:SELL M15:- (TF conflict)
+ [Pocket Scout v3.0] 💰 Signal: BUY | Base: 76% | MTF: -5% | Regime: +15% | Final: 86%
+ [Pocket Scout v3.0] 📊 Using indicator analysis: BUY @ 86%
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: BUY | Conf: 86% | WR: 52.7% | Duration: 5min | Price: 1.16271
+ [Pocket Scout v3.0] ⏰ Scheduled result check for BUY signal in 5 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [AutoTrader] ✅ Valid candidate [PS v3.0]: BUY @ 86% | WR:52.7% (5min, age: 1s)
+ [AutoTrader] 🎯 Executing STANDARD: BUY 5min @86% (EUR/USD OTC)
+ [AT] ✅ BUY 5min @86%
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 100 | Failed: 100
+ [Pocket Scout v3.0] 🎯 Signal result: LOSS | BUY @ 1.16329 → 1.16312 (-0.015%) | WR: 52.6%
+ [CyclicDecisionEngine] Cycle triggered (60.0s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:BUY M5:SELL M15:- (TF conflict)
+ [Pocket Scout v3.0] ⚡ Fallback signal generated: SELL @ 64% (trend-based)
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: SELL | Conf: 64% | WR: 52.6% | Duration: 3min | Price: 1.16313
+ [Pocket Scout v3.0] ⏰ Scheduled result check for SELL signal in 3 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [AutoTrader] ✅ Valid candidate [PS v3.0]: SELL @ 64% | WR:52.6% (3min, age: 2s)
+ [AutoTrader] 🎯 Executing STANDARD: SELL 3min @64% (EUR/USD OTC)
+ [AT] ✅ SELL 3min @64%
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 100 | Failed: 100
+ [Pocket Scout v3.0] 🎯 Signal result: LOSS | BUY @ 1.16342 → 1.16291 (-0.044%) | WR: 52.5%
+ [CyclicDecisionEngine] Cycle triggered (61.0s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:BUY M5:SELL M15:- (TF conflict)
+ [Pocket Scout v3.0] 💰 Signal: BUY | Base: 48% | MTF: -5% | Regime: +15% | Final: 58%
+ [Pocket Scout v3.0] 📊 Using indicator analysis: BUY @ 58%
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: BUY | Conf: 58% | WR: 52.5% | Duration: 5min | Price: 1.16283
+ [Pocket Scout v3.0] ⏰ Scheduled result check for BUY signal in 5 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - BUY@58% WR:52.5%
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - BUY@58% WR:52.5%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 16s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 18s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 19s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 21s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 22s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 24s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - BUY@58% WR:52.5%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 25s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 27s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 28s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 30s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 31s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 33s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - BUY@58% WR:52.5%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 34s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 36s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 37s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 39s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 40s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 42s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 43s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - BUY@58% WR:52.5%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 45s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 46s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 48s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 49s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 51s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 52s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 54s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - BUY@58% WR:52.5%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 55s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 57s > 15s)
+ [Pocket Scout v3.0] 🧠 Analyzing patterns and adjusting indicator weights...
+ [Pocket Scout v3.0] 📊 Weight adjustments:
+      RSI: 0.50 → 0.50 (WR: 50.0%)
+      MACD: 1.00 → 1.00 (WR: 54.8%)
+      EMA: 0.50 → 0.50 (Trend WR: 48.5%)
+ [Pocket Scout v3.0] ⏰ Best trading hour: 2:00 (WR: 62.7%)
+ [Pocket Scout v3.0] 📈 Best confidence range: 80-90% (WR: 66.7%)
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 100 | Failed: 100
+ [Pocket Scout v3.0] 🎯 Signal result: LOSS | BUY @ 1.16326 → 1.16273 (-0.046%) | WR: 52.5%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 58s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 60s > 15s)
+ [CyclicDecisionEngine] Cycle triggered (61.0s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:BUY M5:SELL M15:- (TF conflict)
+ [Pocket Scout v3.0] 💰 Signal: BUY | Base: 55% | MTF: -5% | Regime: +15% | Final: 65%
+ [Pocket Scout v3.0] 📊 Using indicator analysis: BUY @ 65%
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: BUY | Conf: 65% | WR: 52.5% | Duration: 5min | Price: 1.16274
+ [Pocket Scout v3.0] ⏰ Scheduled result check for BUY signal in 5 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [AutoTrader] ✅ Valid candidate [PS v3.0]: BUY @ 65% | WR:52.5% (5min, age: 0s)
+ [AutoTrader] 🎯 Executing STANDARD: BUY 5min @65% (EUR/USD OTC)
+ [AT] ✅ BUY 5min @65%
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 100 | Failed: 100
+ [Pocket Scout v3.0] 🎯 Signal result: LOSS | BUY @ 1.16305 → 1.16271 (-0.029%) | WR: 52.4%
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 100 | Failed: 100
+ [Pocket Scout v3.0] 🎯 Signal result: WIN | SELL @ 1.16313 → 1.16270 (-0.037%) | WR: 52.5%
+ [CyclicDecisionEngine] Cycle triggered (61.0s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:BUY M5:SELL M15:- (TF conflict)
+ [Pocket Scout v3.0] ⚡ Fallback signal generated: SELL @ 53% (trend-based)
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: SELL | Conf: 53% | WR: 52.5% | Duration: 3min | Price: 1.16273
+ [Pocket Scout v3.0] ⏰ Scheduled result check for SELL signal in 3 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@53% WR:52.5%
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@53% WR:52.5%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 16s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 17s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 19s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 20s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 22s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@53% WR:52.5%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 23s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 25s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 26s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 28s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 29s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 31s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@53% WR:52.5%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 32s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 34s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 35s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 37s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 38s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 40s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 41s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@53% WR:52.5%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 43s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 44s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 46s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 47s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 49s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 50s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 52s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@53% WR:52.5%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 53s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 55s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 56s > 15s)
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 100 | Failed: 100
+ [Pocket Scout v3.0] 🎯 Signal result: LOSS | BUY @ 1.16271 → 1.16263 (-0.007%) | WR: 52.5%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 58s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 59s > 15s)
+ [CyclicDecisionEngine] Cycle triggered (61.0s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:BUY M5:SELL M15:- (TF conflict)
+ [Pocket Scout v3.0] ⚡ Fallback signal generated: SELL @ 59% (trend-based)
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: SELL | Conf: 59% | WR: 52.5% | Duration: 3min | Price: 1.16281
+ [Pocket Scout v3.0] ⏰ Scheduled result check for SELL signal in 3 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@59% WR:52.5%
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@59% WR:52.5%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 16s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 17s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 19s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 20s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@59% WR:52.5%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 22s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@59% WR:52.5%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 23s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 25s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 26s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 28s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 29s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 31s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@59% WR:52.5%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 32s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 34s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 35s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 37s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 38s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 40s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 41s > 15s)
+ [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@59% WR:52.5%
+ [AutoTrader] ⏸️ Signal too old: signal (age: 43s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 44s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 46s > 15s)
+ [AutoTrader] ⏸️ Signal too old: signal (age: 47s > 15s)
+content-auto_trader.js:179 [AutoTrader] ⏸️ Signal too old: signal (age: 49s > 15s)
+content-auto_trader.js:179 [AutoTrader] ⏸️ Signal too old: signal (age: 50s > 15s)
+content-auto_trader.js:97 [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@59% WR:52.5%
+content-auto_trader.js:179 [AutoTrader] ⏸️ Signal too old: signal (age: 52s > 15s)
+content-auto_trader.js:97 [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@59% WR:52.5%
+content-auto_trader.js:179 [AutoTrader] ⏸️ Signal too old: signal (age: 53s > 15s)
+content-auto_trader.js:179 [AutoTrader] ⏸️ Signal too old: signal (age: 55s > 15s)
+content-auto_trader.js:179 [AutoTrader] ⏸️ Signal too old: signal (age: 56s > 15s)
+content-auto_trader.js:179 [AutoTrader] ⏸️ Signal too old: signal (age: 58s > 15s)
+content-auto_trader.js:179 [AutoTrader] ⏸️ Signal too old: signal (age: 59s > 15s)
+cyclic-decision-engine.js:41 [CyclicDecisionEngine] Cycle triggered (60.5s)
+content.js:517 [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+content.js:327 [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+content.js:445 [Pocket Scout v3.0] ⏱️ Timeframes: M1:BUY M5:SELL M15:- (TF conflict)
+content.js:569 [Pocket Scout v3.0] ⚡ Fallback signal generated: SELL @ 60% (trend-based)
+content.js:600 [Pocket Scout v3.0] ✅ Signal ALWAYS shown: SELL | Conf: 60% | WR: 52.4% | Duration: 3min | Price: 1.16264
+content.js:641 [Pocket Scout v3.0] ⏰ Scheduled result check for SELL signal in 3 minutes
+content.js:630 [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+content-auto_trader.js:175 [AutoTrader] ✅ Valid candidate [PS v3.0]: SELL @ 60% | WR:52.4% (3min, age: 0s)
+content-auto_trader.js:726 [AutoTrader] 🎯 Executing STANDARD: SELL 3min @60% (EUR/USD OTC)
+content-auto_trader.js:97 [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@60% WR:52.4%
+content-auto_trader.js:175 [AutoTrader] ✅ Valid candidate [PS v3.0]: SELL @ 60% | WR:52.4% (3min, age: 1s)
+content-auto_trader.js:428 [AT] ✅ SELL 3min @60%
+content.js:750 [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 100 | Failed: 100
+content.js:686 [Pocket Scout v3.0] 🎯 Signal result: WIN | BUY @ 1.16283 → 1.16295 (+0.010%) | WR: 52.5%
+content.js:750 [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 100 | Failed: 100
+content.js:686 [Pocket Scout v3.0] 🎯 Signal result: LOSS | SELL @ 1.16273 → 1.16301 (+0.024%) | WR: 52.5%
+cyclic-decision-engine.js:41 [CyclicDecisionEngine] Cycle triggered (60.0s)
+content.js:517 [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+content.js:327 [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+content.js:445 [Pocket Scout v3.0] ⏱️ Timeframes: M1:BUY M5:SELL M15:- (TF conflict)
+content.js:569 [Pocket Scout v3.0] ⚡ Fallback signal generated: SELL @ 63% (trend-based)
+content.js:600 [Pocket Scout v3.0] ✅ Signal ALWAYS shown: SELL | Conf: 63% | WR: 52.5% | Duration: 3min | Price: 1.16304
+content.js:641 [Pocket Scout v3.0] ⏰ Scheduled result check for SELL signal in 3 minutes
+content.js:630 [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+content-auto_trader.js:175 [AutoTrader] ✅ Valid candidate [PS v3.0]: SELL @ 63% | WR:52.5% (3min, age: 4s)
+content-auto_trader.js:726 [AutoTrader] 🎯 Executing STANDARD: SELL 3min @63% (EUR/USD OTC)
+content-auto_trader.js:175 [AutoTrader] ✅ Valid candidate [PS v3.0]: SELL @ 63% | WR:52.5% (3min, age: 6s)
+content-auto_trader.js:428 [AT] ✅ SELL 3min @63%
+content.js:750 [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 100 | Failed: 100
+content.js:686 [Pocket Scout v3.0] 🎯 Signal result: WIN | BUY @ 1.16274 → 1.16301 (+0.023%) | WR: 52.5%
+content.js:750 [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 100 | Failed: 100
+content.js:686 [Pocket Scout v3.0] 🎯 Signal result: LOSS | SELL @ 1.16281 → 1.16301 (+0.017%) | WR: 52.5%
+cyclic-decision-engine.js:41 [CyclicDecisionEngine] Cycle triggered (61.0s)
+content.js:517 [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+content.js:327 [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+content.js:445 [Pocket Scout v3.0] ⏱️ Timeframes: M1:BUY M5:SELL M15:- (TF conflict)
+content.js:569 [Pocket Scout v3.0] ⚡ Fallback signal generated: SELL @ 61% (trend-based)
+content.js:600 [Pocket Scout v3.0] ✅ Signal ALWAYS shown: SELL | Conf: 61% | WR: 52.5% | Duration: 3min | Price: 1.16299
+content.js:641 [Pocket Scout v3.0] ⏰ Scheduled result check for SELL signal in 3 minutes
+content.js:630 [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+content-auto_trader.js:175 [AutoTrader] ✅ Valid candidate [PS v3.0]: SELL @ 61% | WR:52.5% (3min, age: 7s)
+content-auto_trader.js:726 [AutoTrader] 🎯 Executing STANDARD: SELL 3min @61% (EUR/USD OTC)
+content-auto_trader.js:428 [AT] ✅ SELL 3min @61%
+cyclic-decision-engine.js:41 [CyclicDecisionEngine] Cycle triggered (111.0s)
+content.js:517 [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+content.js:327 [Pocket Scout v3.0] 🌊 Market Regime: RANGING
+content.js:445 [Pocket Scout v3.0] ⏱️ Timeframes: M1:BUY M5:SELL M15:- (TF conflict)
+content.js:569 [Pocket Scout v3.0] ⚡ Fallback signal generated: SELL @ 60% (trend-based)
+content.js:600 [Pocket Scout v3.0] ✅ Signal ALWAYS shown: SELL | Conf: 60% | WR: 52.5% | Duration: 3min | Price: 1.16324
+content.js:641 [Pocket Scout v3.0] ⏰ Scheduled result check for SELL signal in 3 minutes
+content.js:630 [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+content-auto_trader.js:97 [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@60% WR:52.5%
+content-auto_trader.js:175 [AutoTrader] ✅ Valid candidate [PS v3.0]: SELL @ 60% | WR:52.5% (3min, age: 0s)
+content-auto_trader.js:726 [AutoTrader] 🎯 Executing STANDARD: SELL 3min @60% (EUR/USD OTC)
+content.js:750 [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 100 | Failed: 100
+content.js:686 [Pocket Scout v3.0] 🎯 Signal result: LOSS | SELL @ 1.16264 → 1.16324 (+0.052%) | WR: 52.4%
+content-auto_trader.js:179 [AutoTrader] ⏸️ Signal too old: signal (age: 15s > 15s)
+content.js:750 [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 100 | Failed: 100
+content.js:686 [Pocket Scout v3.0] 🎯 Signal result: LOSS | SELL @ 1.16304 → 1.16328 (+0.021%) | WR: 52.4%
+content-auto_trader.js:428 [AT] ✅ SELL 3min @60%
+bugsnag-7.min.js?ver=8.0.83:1 APP: [-] wss://demo-api-eu.po.market
+cyclic-decision-engine.js:41 [CyclicDecisionEngine] Cycle triggered (60.0s)
+content.js:517 [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+content.js:327 [Pocket Scout v3.0] 🌊 Market Regime: RANGING
+content.js:445 [Pocket Scout v3.0] ⏱️ Timeframes: M1:SELL M5:SELL M15:- (Partial agreement)
+content.js:569 [Pocket Scout v3.0] ⚡ Fallback signal generated: SELL @ 55% (trend-based)
+content.js:600 [Pocket Scout v3.0] ✅ Signal ALWAYS shown: SELL | Conf: 55% | WR: 52.4% | Duration: 3min | Price: 1.16334
+content.js:641 [Pocket Scout v3.0] ⏰ Scheduled result check for SELL signal in 3 minutes
+content.js:630 [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+cyclic-decision-engine.js:41 [CyclicDecisionEngine] Cycle triggered (60.0s)
+content.js:517 [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+content.js:327 [Pocket Scout v3.0] 🌊 Market Regime: RANGING
+content.js:445 [Pocket Scout v3.0] ⏱️ Timeframes: M1:SELL M5:SELL M15:- (Partial agreement)
+content.js:569 [Pocket Scout v3.0] ⚡ Fallback signal generated: SELL @ 62% (trend-based)
+content.js:600 [Pocket Scout v3.0] ✅ Signal ALWAYS shown: SELL | Conf: 62% | WR: 52.3% | Duration: 3min | Price: 1.16334
+content.js:641 [Pocket Scout v3.0] ⏰ Scheduled result check for SELL signal in 3 minutes
+content.js:630 [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+content-auto_trader.js:97 [AutoTrader] ✅ Feed read from Pocket Scout v3.0: 1 signal(s) - SELL@62% WR:52.3%
+content-auto_trader.js:175 [AutoTrader] ✅ Valid candidate [PS v3.0]: SELL @ 62% | WR:52.3% (3min, age: 0s)
+content-auto_trader.js:726 [AutoTrader] 🎯 Executing STANDARD: SELL 3min @62% (EUR/USD OTC)
+content.js:750 [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 100 | Failed: 100
+content.js:686 [Pocket Scout v3.0] 🎯 Signal result: LOSS | SELL @ 1.16299 → 1.16334 (+0.030%) | WR: 52.3%
+bugsnag-7.min.js?ver=8.0.83:1 APP: try connected
+bugsnag-7.min.js?ver=8.0.83:1 APP: Connecting
+content-auto_trader.js:179 [AutoTrader] ⏸️ Signal too old: signal (age: 38s > 15s)
+bugsnag-7.min.js?ver=8.0.83:1 APP: Connecting
+vendor.js?v=1767002498:2 WebSocket connection to 'wss://demo-api-eu.po.market/socket.io/?EIO=4&transport=websocket' failed: WebSocket is closed before the connection is established.
+value @ vendor.js?v=1767002498:2
+content-auto_trader.js:428 [AT] ✅ SELL 3min @62%
+bugsnag-7.min.js?ver=8.0.83:1 APP: [+] wss://demo-api-eu.po.market
+bugsnag-7.min.js?ver=8.0.83:1 APP: Success auth
