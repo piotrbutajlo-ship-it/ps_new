@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Pocket Scout v3.0",
-  "version": "3.0.0",
-  "description": "10-Minute Cyclic Signals with Multi-Indicator Analysis by Claude Opus",
+  "name": "Pocket Scout v4.0",
+  "version": "4.0.0",
+  "description": "AI-Powered Signals with Williams %R, CCI, Awesome Oscillator - Optimized for RANGING Markets by Claude Opus",
   "permissions": [
     "storage",
     "activeTab"
@@ -27,7 +27,7 @@
   },
   "action": {
     "default_popup": "popup.html",
-    "default_title": "Pocket Scout v3.0"
+    "default_title": "Pocket Scout v4.0"
   }
 }
 

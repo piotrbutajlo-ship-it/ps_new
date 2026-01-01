@@ -262,6 +262,25 @@ window.TechnicalIndicators = (function() {
     return williamsR;
   }
 
+  function calculateAwesomeOscillator(highs, lows) {
+    // Awesome Oscillator = SMA(Median Price, 5) - SMA(Median Price, 34)
+    // Median Price = (High + Low) / 2
+    if (highs.length < 34 || lows.length < 34) return null;
+    
+    // Calculate median prices
+    const medianPrices = [];
+    for (let i = 0; i < highs.length; i++) {
+      medianPrices.push((highs[i] + lows[i]) / 2);
+    }
+    
+    const sma5 = calculateSMA(medianPrices, 5);
+    const sma34 = calculateSMA(medianPrices, 34);
+    
+    if (!sma5 || !sma34) return null;
+    
+    return sma5 - sma34;
+  }
+
   /**
    * Lightweight candlestick pattern detector (last 2-3 candles)
    * Returns detected pattern names, directional bias, and a confidence score (0-1)
@@ -360,6 +379,7 @@ window.TechnicalIndicators = (function() {
     calculateADX,
     calculateCCI,
     calculateWilliamsR,
+    calculateAwesomeOscillator,
     detectCandlestickPatterns
   };
 })();
