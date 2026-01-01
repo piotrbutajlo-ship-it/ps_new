@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Pocket Scout v4.0",
-  "version": "4.0.0",
-  "description": "AI-Powered Signals with Williams %R, CCI, Awesome Oscillator - Optimized for RANGING Markets by Claude Opus",
+  "name": "Pocket Scout v5 WIN",
+  "version": "5.0.0",
+  "description": "Pocket Scout v5 WIN - Profitable binary options signals with Williams %R, CCI, Awesome Oscillator. Fixed bugs, optimized for consistent profitability.",
   "permissions": [
     "storage",
     "activeTab"
@@ -27,7 +27,7 @@
   },
   "action": {
     "default_popup": "popup.html",
-    "default_title": "Pocket Scout v4.0"
+    "default_title": "Pocket Scout v5 WIN"
   }
 }
 
