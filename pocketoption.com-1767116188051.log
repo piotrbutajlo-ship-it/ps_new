@@ -1,0 +1,259 @@
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 83 | Failed: 94
+ [Pocket Scout v3.0] 🎯 Signal result: LOSS | SELL @ 1.15891 → 1.15915 (+0.021%) | WR: 46.4%
+ [CyclicDecisionEngine] Cycle triggered (60.0s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: RANGING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:SELL M5:- M15:- (Partial agreement)
+ [Pocket Scout v3.0] ⚡ Fallback signal generated: SELL @ 57% (trend-based)
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: SELL | Conf: 57% | WR: 46.4% | Duration: 3min | Price: 1.15913
+ [Pocket Scout v3.0] ⏰ Scheduled result check for SELL signal in 3 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 83 | Failed: 95
+ [Pocket Scout v3.0] 🎯 Signal result: LOSS | SELL @ 1.15886 → 1.15968 (+0.071%) | WR: 46.1%
+ [CyclicDecisionEngine] Cycle triggered (60.0s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: RANGING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:SELL M5:- M15:- (Partial agreement)
+ [Pocket Scout v3.0] ⚡ Fallback signal generated: BUY @ 64% (trend-based)
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: BUY | Conf: 64% | WR: 46.1% | Duration: 3min | Price: 1.15960
+ [Pocket Scout v3.0] ⏰ Scheduled result check for BUY signal in 3 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 83 | Failed: 96
+ [Pocket Scout v3.0] 🎯 Signal result: LOSS | SELL @ 1.15893 → 1.16002 (+0.094%) | WR: 45.9%
+ [CyclicDecisionEngine] Cycle triggered (61.0s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:SELL M5:- M15:- (Partial agreement)
+ [Pocket Scout v3.0] ⚡ Fallback signal generated: BUY @ 54% (trend-based)
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: BUY | Conf: 54% | WR: 45.9% | Duration: 3min | Price: 1.16000
+ [Pocket Scout v3.0] ⏰ Scheduled result check for BUY signal in 3 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [Pocket Scout v3.0] 🧠 Analyzing patterns and adjusting indicator weights...
+ [Pocket Scout v3.0] 📊 Weight adjustments:
+      RSI: 2.42 → 2.50 (WR: 68.8%)
+      MACD: 3.00 → 3.00 (WR: 70.6%)
+      EMA: 2.42 → 2.50 (Trend WR: 81.3%)
+content.js:816 Uncaught 
+ [CyclicDecisionEngine] Cycle triggered (61.0s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:SELL M5:- M15:- (Partial agreement)
+ [Pocket Scout v3.0] ⚡ Fallback signal generated: BUY @ 64% (trend-based)
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: BUY | Conf: 64% | WR: 45.6% | Duration: 3min | Price: 1.16002
+ [Pocket Scout v3.0] ⏰ Scheduled result check for BUY signal in 3 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 84 | Failed: 97
+ [Pocket Scout v3.0] 🎯 Signal result: WIN | BUY @ 1.15960 → 1.16024 (+0.055%) | WR: 45.9%
+ [CyclicDecisionEngine] Cycle triggered (61.0s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:SELL M5:- M15:- (Partial agreement)
+ [Pocket Scout v3.0] 💰 Signal: SELL | Base: 20% | MTF: 0% | Regime: +15% | Contrarian: +5% | Final: 40%
+ [Pocket Scout v3.0] 📊 Using indicator analysis: SELL @ 40%
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: SELL | Conf: 40% | WR: 45.9% | Duration: 5min | Price: 1.16023
+ [Pocket Scout v3.0] ⏰ Scheduled result check for SELL signal in 5 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 85 | Failed: 97
+ [Pocket Scout v3.0] 🎯 Signal result: WIN | BUY @ 1.16000 → 1.16036 (+0.031%) | WR: 46.2%
+ [CyclicDecisionEngine] Cycle triggered (60.0s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:SELL M5:- M15:- (Partial agreement)
+ [Pocket Scout v3.0] 💰 Signal: SELL | Base: 21% | MTF: 0% | Regime: +15% | Contrarian: +5% | Final: 41%
+ [Pocket Scout v3.0] 📊 Using indicator analysis: SELL @ 41%
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: SELL | Conf: 41% | WR: 46.2% | Duration: 5min | Price: 1.16035
+ [Pocket Scout v3.0] ⏰ Scheduled result check for SELL signal in 5 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 86 | Failed: 97
+ [Pocket Scout v3.0] 🎯 Signal result: WIN | BUY @ 1.16002 → 1.16026 (+0.021%) | WR: 46.5%
+ [CyclicDecisionEngine] Cycle triggered (61.0s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:SELL M5:- M15:- (Partial agreement)
+ [Pocket Scout v3.0] ⚡ Fallback signal generated: BUY @ 54% (trend-based)
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: BUY | Conf: 54% | WR: 46.5% | Duration: 3min | Price: 1.16022
+ [Pocket Scout v3.0] ⏰ Scheduled result check for BUY signal in 3 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [CyclicDecisionEngine] Cycle triggered (60.0s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:BUY M5:- M15:- (Partial agreement)
+ [Pocket Scout v3.0] ⚡ Fallback signal generated: BUY @ 51% (trend-based)
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: BUY | Conf: 51% | WR: 46.2% | Duration: 3min | Price: 1.15999
+ [Pocket Scout v3.0] ⏰ Scheduled result check for BUY signal in 3 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [CyclicDecisionEngine] Cycle triggered (60.0s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:SELL M5:- M15:- (Partial agreement)
+ [Pocket Scout v3.0] ⚡ Fallback signal generated: BUY @ 52% (trend-based)
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: BUY | Conf: 52% | WR: 46.0% | Duration: 3min | Price: 1.16049
+ [Pocket Scout v3.0] ⏰ Scheduled result check for BUY signal in 3 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 86 | Failed: 98
+ [Pocket Scout v3.0] 🎯 Signal result: LOSS | SELL @ 1.16023 → 1.16090 (+0.058%) | WR: 45.7%
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 87 | Failed: 98
+ [Pocket Scout v3.0] 🎯 Signal result: WIN | BUY @ 1.16022 → 1.16091 (+0.059%) | WR: 46.3%
+ [CyclicDecisionEngine] Cycle triggered (61.0s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:SELL M5:- M15:- (Partial agreement)
+ [Pocket Scout v3.0] 💰 Signal: SELL | Base: 26% | MTF: 0% | Regime: +15% | Contrarian: +5% | Final: 46%
+ [Pocket Scout v3.0] 📊 Using indicator analysis: SELL @ 46%
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: SELL | Conf: 46% | WR: 46.3% | Duration: 5min | Price: 1.16092
+ [Pocket Scout v3.0] ⏰ Scheduled result check for SELL signal in 5 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 87 | Failed: 99
+ [Pocket Scout v3.0] 🎯 Signal result: LOSS | SELL @ 1.16035 → 1.16088 (+0.046%) | WR: 46.0%
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 88 | Failed: 99
+ [Pocket Scout v3.0] 🎯 Signal result: WIN | BUY @ 1.15999 → 1.16088 (+0.077%) | WR: 46.6%
+ [CyclicDecisionEngine] Cycle triggered (61.0s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:SELL M5:- M15:- (Partial agreement)
+ [Pocket Scout v3.0] 💰 Signal: SELL | Base: 22% | MTF: 0% | Regime: +15% | Contrarian: +5% | Final: 42%
+ [Pocket Scout v3.0] 📊 Using indicator analysis: SELL @ 42%
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: SELL | Conf: 42% | WR: 46.6% | Duration: 5min | Price: 1.16080
+ [Pocket Scout v3.0] ⏰ Scheduled result check for SELL signal in 5 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 89 | Failed: 99
+ [Pocket Scout v3.0] 🎯 Signal result: WIN | BUY @ 1.16049 → 1.16063 (+0.012%) | WR: 46.8%
+ [CyclicDecisionEngine] Cycle triggered (61.0s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:SELL M5:- M15:- (Partial agreement)
+ [Pocket Scout v3.0] ⚡ Fallback signal generated: BUY @ 50% (trend-based)
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: BUY | Conf: 50% | WR: 46.8% | Duration: 3min | Price: 1.16073
+ [Pocket Scout v3.0] ⏰ Scheduled result check for BUY signal in 3 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [CyclicDecisionEngine] Cycle triggered (60.0s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:SELL M5:- M15:- (Partial agreement)
+ [Pocket Scout v3.0] ⚡ Fallback signal generated: BUY @ 52% (trend-based)
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: BUY | Conf: 52% | WR: 46.6% | Duration: 3min | Price: 1.16088
+ [Pocket Scout v3.0] ⏰ Scheduled result check for BUY signal in 3 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [CyclicDecisionEngine] Cycle triggered (61.0s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:SELL M5:- M15:- (Partial agreement)
+ [Pocket Scout v3.0] ⚡ Fallback signal generated: BUY @ 63% (trend-based)
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: BUY | Conf: 63% | WR: 46.4% | Duration: 3min | Price: 1.16069
+ [Pocket Scout v3.0] ⏰ Scheduled result check for BUY signal in 3 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 90 | Failed: 99
+ [Pocket Scout v3.0] 🎯 Signal result: WIN | SELL @ 1.16092 → 1.16088 (-0.003%) | WR: 46.6%
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 91 | Failed: 99
+ [Pocket Scout v3.0] 🎯 Signal result: WIN | BUY @ 1.16073 → 1.16084 (+0.009%) | WR: 47.2%
+ [CyclicDecisionEngine] Cycle triggered (61.0s)
+ [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+ [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+ [Pocket Scout v3.0] ⏱️ Timeframes: M1:SELL M5:- M15:- (Partial agreement)
+ [Pocket Scout v3.0] ⚡ Fallback signal generated: BUY @ 60% (trend-based)
+ [Pocket Scout v3.0] ✅ Signal ALWAYS shown: BUY | Conf: 60% | WR: 47.2% | Duration: 3min | Price: 1.16081
+ [Pocket Scout v3.0] ⏰ Scheduled result check for BUY signal in 3 minutes
+ [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 91 | Failed: 100
+ [Pocket Scout v3.0] 🎯 Signal result: LOSS | SELL @ 1.16080 → 1.16147 (+0.058%) | WR: 46.9%
+ [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 92 | Failed: 100
+ [Pocket Scout v3.0] 🎯 Signal result: WIN | BUY @ 1.16088 → 1.16144 (+0.048%) | WR: 47.4%
+ [CyclicDecisionEngine] Cycle triggered (61.0s)
+content.js:533 [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+content.js:326 [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+content.js:444 [Pocket Scout v3.0] ⏱️ Timeframes: M1:SELL M5:- M15:- (Partial agreement)
+content.js:585 [Pocket Scout v3.0] ⚡ Fallback signal generated: BUY @ 61% (trend-based)
+content.js:616 [Pocket Scout v3.0] ✅ Signal ALWAYS shown: BUY | Conf: 61% | WR: 47.4% | Duration: 3min | Price: 1.16138
+content.js:657 [Pocket Scout v3.0] ⏰ Scheduled result check for BUY signal in 3 minutes
+content.js:646 [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+content.js:754 [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 93 | Failed: 100
+content.js:702 [Pocket Scout v3.0] 🎯 Signal result: WIN | BUY @ 1.16069 → 1.16164 (+0.082%) | WR: 47.7%
+cyclic-decision-engine.js:41 [CyclicDecisionEngine] Cycle triggered (61.0s)
+content.js:533 [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+content.js:326 [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+content.js:444 [Pocket Scout v3.0] ⏱️ Timeframes: M1:SELL M5:- M15:- (Partial agreement)
+content.js:492 [Pocket Scout v3.0] 💰 Signal: SELL | Base: 23% | MTF: 0% | Regime: +15% | Contrarian: +5% | Final: 43%
+content.js:550 [Pocket Scout v3.0] 📊 Using indicator analysis: SELL @ 43%
+content.js:616 [Pocket Scout v3.0] ✅ Signal ALWAYS shown: SELL | Conf: 43% | WR: 47.7% | Duration: 5min | Price: 1.16177
+content.js:657 [Pocket Scout v3.0] ⏰ Scheduled result check for SELL signal in 5 minutes
+content.js:646 [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+content.js:754 [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 94 | Failed: 100
+content.js:702 [Pocket Scout v3.0] 🎯 Signal result: WIN | BUY @ 1.16081 → 1.16156 (+0.065%) | WR: 48.0%
+cyclic-decision-engine.js:41 [CyclicDecisionEngine] Cycle triggered (61.0s)
+content.js:533 [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+content.js:326 [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+content.js:444 [Pocket Scout v3.0] ⏱️ Timeframes: M1:SELL M5:- M15:- (Partial agreement)
+content.js:585 [Pocket Scout v3.0] ⚡ Fallback signal generated: BUY @ 63% (trend-based)
+content.js:616 [Pocket Scout v3.0] ✅ Signal ALWAYS shown: BUY | Conf: 63% | WR: 48.0% | Duration: 3min | Price: 1.16157
+content.js:657 [Pocket Scout v3.0] ⏰ Scheduled result check for BUY signal in 3 minutes
+content.js:646 [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+content.js:754 [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 95 | Failed: 100
+content.js:702 [Pocket Scout v3.0] 🎯 Signal result: WIN | BUY @ 1.16138 → 1.16170 (+0.028%) | WR: 48.2%
+cyclic-decision-engine.js:41 [CyclicDecisionEngine] Cycle triggered (60.0s)
+content.js:533 [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+content.js:326 [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+content.js:444 [Pocket Scout v3.0] ⏱️ Timeframes: M1:SELL M5:- M15:- (Partial agreement)
+content.js:585 [Pocket Scout v3.0] ⚡ Fallback signal generated: BUY @ 62% (trend-based)
+content.js:616 [Pocket Scout v3.0] ✅ Signal ALWAYS shown: BUY | Conf: 62% | WR: 48.2% | Duration: 3min | Price: 1.16173
+content.js:657 [Pocket Scout v3.0] ⏰ Scheduled result check for BUY signal in 3 minutes
+content.js:646 [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+cyclic-decision-engine.js:41 [CyclicDecisionEngine] Cycle triggered (60.0s)
+content.js:533 [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+content.js:326 [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+content.js:444 [Pocket Scout v3.0] ⏱️ Timeframes: M1:SELL M5:BUY M15:- (TF conflict)
+content.js:585 [Pocket Scout v3.0] ⚡ Fallback signal generated: BUY @ 61% (trend-based)
+content.js:616 [Pocket Scout v3.0] ✅ Signal ALWAYS shown: BUY | Conf: 61% | WR: 48.0% | Duration: 3min | Price: 1.16161
+content.js:657 [Pocket Scout v3.0] ⏰ Scheduled result check for BUY signal in 3 minutes
+content.js:646 [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+content.js:754 [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 96 | Failed: 100
+content.js:702 [Pocket Scout v3.0] 🎯 Signal result: WIN | BUY @ 1.16157 → 1.16169 (+0.010%) | WR: 48.2%
+cyclic-decision-engine.js:41 [CyclicDecisionEngine] Cycle triggered (61.0s)
+content.js:533 [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+content.js:326 [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+content.js:444 [Pocket Scout v3.0] ⏱️ Timeframes: M1:SELL M5:BUY M15:- (TF conflict)
+content.js:585 [Pocket Scout v3.0] ⚡ Fallback signal generated: BUY @ 63% (trend-based)
+content.js:616 [Pocket Scout v3.0] ✅ Signal ALWAYS shown: BUY | Conf: 63% | WR: 48.2% | Duration: 3min | Price: 1.16167
+content.js:657 [Pocket Scout v3.0] ⏰ Scheduled result check for BUY signal in 3 minutes
+content.js:646 [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+content.js:754 [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 96 | Failed: 100
+content.js:702 [Pocket Scout v3.0] 🎯 Signal result: LOSS | SELL @ 1.16177 → 1.16198 (+0.018%) | WR: 48.0%
+content.js:754 [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 97 | Failed: 100
+content.js:702 [Pocket Scout v3.0] 🎯 Signal result: WIN | BUY @ 1.16173 → 1.16198 (+0.022%) | WR: 48.5%
+cyclic-decision-engine.js:41 [CyclicDecisionEngine] Cycle triggered (61.0s)
+content.js:533 [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+content.js:326 [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+content.js:444 [Pocket Scout v3.0] ⏱️ Timeframes: M1:SELL M5:BUY M15:- (TF conflict)
+content.js:585 [Pocket Scout v3.0] ⚡ Fallback signal generated: BUY @ 55% (trend-based)
+content.js:616 [Pocket Scout v3.0] ✅ Signal ALWAYS shown: BUY | Conf: 55% | WR: 48.5% | Duration: 3min | Price: 1.16203
+content.js:657 [Pocket Scout v3.0] ⏰ Scheduled result check for BUY signal in 3 minutes
+content.js:646 [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+content.js:754 [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 98 | Failed: 100
+content.js:702 [Pocket Scout v3.0] 🎯 Signal result: WIN | BUY @ 1.16161 → 1.16191 (+0.026%) | WR: 48.8%
+cyclic-decision-engine.js:41 [CyclicDecisionEngine] Cycle triggered (61.0s)
+content.js:533 [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+content.js:326 [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+content.js:444 [Pocket Scout v3.0] ⏱️ Timeframes: M1:BUY M5:BUY M15:- (Partial agreement)
+content.js:585 [Pocket Scout v3.0] ⚡ Fallback signal generated: BUY @ 57% (trend-based)
+content.js:616 [Pocket Scout v3.0] ✅ Signal ALWAYS shown: BUY | Conf: 57% | WR: 48.8% | Duration: 3min | Price: 1.16179
+content.js:657 [Pocket Scout v3.0] ⏰ Scheduled result check for BUY signal in 3 minutes
+content.js:646 [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+content.js:754 [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 98 | Failed: 100
+content.js:702 [Pocket Scout v3.0] 🎯 Signal result: LOSS | BUY @ 1.16167 → 1.16145 (-0.019%) | WR: 48.5%
+cyclic-decision-engine.js:41 [CyclicDecisionEngine] Cycle triggered (61.0s)
+content.js:533 [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+content.js:326 [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+content.js:444 [Pocket Scout v3.0] ⏱️ Timeframes: M1:BUY M5:BUY M15:- (Partial agreement)
+content.js:585 [Pocket Scout v3.0] ⚡ Fallback signal generated: BUY @ 62% (trend-based)
+content.js:616 [Pocket Scout v3.0] ✅ Signal ALWAYS shown: BUY | Conf: 62% | WR: 48.5% | Duration: 3min | Price: 1.16149
+content.js:657 [Pocket Scout v3.0] ⏰ Scheduled result check for BUY signal in 3 minutes
+content.js:646 [Pocket Scout v3.0] 📤 Published to Auto Trader: Object
+content.js:754 [Pocket Scout v3.0] 🎓 Learning: Pattern recorded | Successful: 98 | Failed: 100
+content.js:702 [Pocket Scout v3.0] 🎯 Signal result: LOSS | BUY @ 1.16203 → 1.16159 (-0.038%) | WR: 48.3%
+cyclic-decision-engine.js:41 [CyclicDecisionEngine] Cycle triggered (61.0s)
+content.js:533 [Pocket Scout v3.0] 🔄 Generating signal... (ALWAYS mode - signal will be shown)
+content.js:326 [Pocket Scout v3.0] 🌊 Market Regime: TRENDING
+content.js:444 [Pocket Scout v3.0] ⏱️ Timeframes: M1:SELL M5:BUY M15:- (TF conflict)
+content.js:585 [Pocket Scout v3.0] ⚡ Fallback signal generated: BUY @ 63% (trend-based)
+content.js:616 [Pocket Scout v3.0] ✅ Signal ALWAYS shown: BUY | Conf: 63% | WR: 48.3% | Duration: 3min | Price: 1.16157
+content.js:657 [Pocket Scout v3.0] ⏰ Scheduled result check for BUY signal in 3 minutes
+content.js:646 [Pocket Scout v3.0] 📤 Published to Auto Trader: {action: 'BUY', confidence: 63, duration: 3, timestamp: 1767116179772, entryPrice: 1.16157, …}

@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "Auto Trader v2.9.0 (Pocket Scout v3.0)",
+  "version": "2.9.0",
+  "description": "Automated trading companion for Pocket Scout v3.0 - Market Regime Detection, Multi-Timeframe Analysis, Win Rate tracking, and advanced learning system support",
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "*://*.pocketoption.com/*",
+    "*://*.po.trade/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.pocketoption.com/*",
+        "*://*.po.trade/*"
+      ],
+      "js": ["content-auto_trader.js"],
+      "run_at": "document_end",
+      "all_frames": false
+    }
+  ],
+  "icons": {
+    "48": "icon-48.png",
+    "128": "icon-128.png"
+  }
+}

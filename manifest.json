@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Pocket Scout Dynamic Time",
-  "version": "2.1.0",
-  "description": "Dynamic Timing Windows (1-5 min) for Optimal Signal Entry with RL Agent",
+  "name": "Pocket Scout v5 WIN",
+  "version": "5.0.0",
+  "description": "Pocket Scout v5 WIN - Profitable binary options signals with Williams %R, CCI, Awesome Oscillator. Fixed bugs, optimized for consistent profitability.",
   "permissions": [
     "storage",
     "activeTab"
@@ -14,14 +14,9 @@
     {
       "matches": ["https://pocketoption.com/*"],
       "js": [
-        "lib/circular-buffer.js",
-        "lib/technical-indicators.js",
-        "lib/market-regime-detector.js",
-        "lib/indicator-groups.js",
-        "lib/dqn-network.js",
-        "lib/experience-replay.js",
-        "lib/rl-integration.js",
-        "lib/signal-timing-controller.js",
+        "circular-buffer.js",
+        "technical-indicators.js",
+        "cyclic-decision-engine.js",
         "content.js"
       ],
       "run_at": "document_idle"
@@ -32,7 +27,7 @@
   },
   "action": {
     "default_popup": "popup.html",
-    "default_title": "Pocket Scout Dynamic Time"
+    "default_title": "Pocket Scout v5 WIN"
   }
 }
 
